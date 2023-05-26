@@ -3,11 +3,39 @@
 #include "wnetwrap.h"
 
 
-using namespace wrap;
-using namespace std;
+void SimpleGet()
+{
+	wrap::Response r;
+	r = wrap::HttpsRequest(wrap::Url{ "www.postman-echo.com/get" }, 
+						wrap::Header{ {"Referer","www.bla.com"},{"Content-Type","*/*"} }, 
+					wrap::Parameters{ {"fruit","mango"},{"price","£3"} }
+			);
+	
+	std::cout << std::endl << r.text << std::endl;
+}
+
+void PostJson()
+{	
+	//posting raw data - does not get url encoded
+	//auto r = HttpsRequest(Url{ "www.postman-echo.com/post" }, Body{ "£" }, Method{ "POST" });
+	//cout << endl << r.text << endl;
+	//url form encode - key value pairs
+	
+	auto r = wrap::HttpsRequest(wrap::Url{"http://0.0.0.0:11502/AuthCheck"},
+		wrap::Header{{"Content-Type", "application/json"}},
+		wrap::Body{R"({"AuthID":"test03",
+										"AuthToken":"5GZF7OFY05P4TT"}
+										)"},
+		wrap::Method{ "POST" });
+					//wrap::Timeout{3000});
+	std::cout << std::endl << r.text << std::endl;
+}
+
 int main()
 {
+	//SimpleGet();
 
+	PostJson();
 	/*
 	cout << "status code: " + r.status_code << endl;
 	cout << r.text << endl;
@@ -22,7 +50,7 @@ int main()
 */
 	//HttpsRequest(Url{ "https://archive-4.kali.org/kali-images/kali-2021.1/kali-linux-2021.1-live-amd64.iso" }, Download{});
 
-	Response r;
+	//wrap::Response r;
 	//r = HttpsRequest(Url{ "www.postman-echo.com/get" }, Header{ {"Referer","www.bla.com"},{"Content-Type","*/*"} }, Parameters{ {"fruit","mango"},{"price","£3"} });
 	//cout << endl << r.text << endl;
 
@@ -30,18 +58,21 @@ int main()
 	//r = HttpsRequest(Url{ "www.postman-echo.com/post" }, Body{ "£" }, Method{ "POST" });
 	//cout << endl << r.text << endl;
 	//url form encode - key value pairs
-	r = HttpsRequest(Url{ "www.httpbin.org/post" }, Payload{ {"name","习近平"} }, Method{ "POST" }, Timeout{1000});
-	cout << endl << r.text << endl;
+	//r = wrap::HttpsRequest(wrap::Url{ "www.httpbin.org/post" }, wrap::Payload{ {"name","习近平"} }, wrap::Method{ "POST" }, wrap::Timeout{1000});
+	//std::cout << std::endl << r.text << std::endl;
+
+
 
 	//note: to upload to file.io do not use www in url, and always use filename file
 	//r = HttpsRequest(Url{ "file.io" }, Multipart{ {"file:file","sample.txt"} }, Method{ "POST" });
 	//cout << endl << r.text << endl;
 
-	r = HttpsRequest(Url{ "https://www.httpbin.org/basic-auth/user/passwd" }, Authentication{  "user","passwd"  });
-	cout << endl << r.text << endl;
+	//r = wrap::HttpsRequest(wrap::Url{ "https://www.httpbin.org/basic-auth/user/passwd" }, wrap::Authentication{  "user","passwd"  });
+	//std::cout << std::endl << r.text << std::endl;
 	
+
 	//receiving a cookie 
-	/*r = HttpsRequest(Url{ "https://www.httpbin.org/cookies/set?cookie=yummy" });
+	/*r = wrap::HttpsRequest(Url{ "https://www.httpbin.org/cookies/set?cookie=yummy" });
 	cout << endl << r.text << endl;
 	cout << "status code: " + r.status_code << endl;
 	cout << "redirect count: " << r.redirect_count << endl;

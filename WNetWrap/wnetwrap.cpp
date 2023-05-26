@@ -106,7 +106,7 @@ wrap::Response wrap::httpsreq(wrap::req request) {
 	BOOL sendr = NULL;
 	if (wrap::toSource.TimeoutRequest == 0) { //if no timeout set then just do normal call 
 		//sending data as bytes (c string) to ensure files e.g. images or zip files get transfered ok - see here: https://stackoverflow.com/a/16502000/13666347
-		sendr = HttpSendRequestA(hRequest, final_headers.c_str(), -1L, &wrap::toSource.PostData[0], sizeof(char) * wrap::toSource.PostData.size());
+		sendr = HttpSendRequestA(hRequest, final_headers.c_str(), 0, &wrap::toSource.PostData[0], sizeof(char) * wrap::toSource.PostData.size());
 	}
 	else { //if timeout set then use threads due to MS bug https://mskb.pkisolutions.com/kb/224318
 		sendr = TimeoutInternetRequest(hRequest, final_headers, output);
@@ -192,6 +192,7 @@ static inline std::map<std::string, std::string> handleURI(wrap::req& request, w
 		//return output;
 	}
 
+	
 	//path (includes fragments, params etc)
 	//assume there is a path if url has a further ? or /
 	if ((URI["host"].find("/") != std::string::npos) || (URI["host"].find("?") != std::string::npos)) {
@@ -237,6 +238,13 @@ static inline std::map<std::string, std::string> handleURI(wrap::req& request, w
 		request.Dl = URI["urlfile"];
 	}
 
+	// http, https 기본 포트가 아닌 주소에 포트를 지정하는 경우(http://dsd.dsd:11052)의 포트번호 설정하기
+	if (auto pos = URI["host"].find(":"); pos != std::string::npos) {
+		auto port_str = URI["host"].substr(pos+1);
+		port = std::stoi(port_str);
+		URI["host"] = URI["host"].substr(0, pos);
+	}	
+	
 	return URI;
 }
 

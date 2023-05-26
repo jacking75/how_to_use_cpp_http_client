@@ -3,7 +3,40 @@ C++ 이후에 나온 언어들은 인터넷 시대에 나와서 대부분 표준
 그러나 C++는 아직까지 표준 라이브러리에서 http 통신을 지원하지 않아서 http 요청을 할 때 타 언어에 비해서 불편하다.  
 `Win32 API`, 외부 라이브러리를 사용하여 http 요청하는 방법을 정리한다.  
   
+<br>      
+    
+# 테스트용 서버
+http 요청에 답변을 주는 더미용 서버로 `FakeHiveServer`(FakeHiveServer 디렉토리에)를 사용한다.
+2개의 API가 있으며 모두 `POST`에 JSON 포맷을 사용한다.  
+ASP.NET Core(.NET 7)를 사용하였다.  
 
+API: 
+```
+POST http://localhost:11502/AuthCheck
+Content-Type: application/json
+
+{
+  "AuthID":"test03",
+  "AuthToken":"5GZF7OFY05P4TT"
+}
+
+
+POST http://localhost:11500/CreateAccount
+Content-Type: application/json
+
+{
+  "ID":"jacking751",
+  "PW":"123qwe",
+  "NickName": "aaa"
+}
+```  
+	 
+`AuthCheck` 요청에 사용할 수 있는 것은 `FakeHiveServer\Controllers\AuthCheckController.cs` 에서 `void Init()` 함수 내용을 본다.  	 
+`CreateAccount` 요청에 사용할 수 있는 것은 `FakeHiveServer\Controllers\InAppCheckController.cs` 에서 `void Init()` 함수 내용을 본다.  	 
+	  
+<br>      
+  
+  
 # 외부 라이브러리  
   
 ## HappyHTTP
@@ -30,6 +63,7 @@ C++ 이후에 나온 언어들은 인터넷 시대에 나와서 대부분 표준
 - `WNetWrap` 디렉토리에 코드가 있다.
 - 백업 목적으로 [원 저장소](https://github.com/hack-tramp/WNetWrap )에서 가져온 것이다.
 - Win32 API인 `WinInet`을 사용하여 별도의 외부라이브러리가 필요 없고, HTTPS도 지원. 당연히 Windows만 지원한다  
+- **문제 있음** : `http://localhost:11502/AuthCheck` 로 POST 방식으로 json 데이터를 보내지 못함
    
 예제 코드: POST Requests  
 ```
