@@ -113,7 +113,7 @@ wrap::Response wrap::httpsreq(wrap::req request) {
 	}
 	if (!sendr)
 	{
-		output.err = "HttpSendRequest failed with error code " + GetLastError();
+		output.err = "HttpSendRequest failed with error code " + std::to_string(GetLastError());
 		return output;
 	}
 

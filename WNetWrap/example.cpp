@@ -16,18 +16,14 @@ void SimpleGet()
 
 void PostJson()
 {	
-	//posting raw data - does not get url encoded
-	//auto r = HttpsRequest(Url{ "www.postman-echo.com/post" }, Body{ "£" }, Method{ "POST" });
-	//cout << endl << r.text << endl;
-	//url form encode - key value pairs
-	
 	auto r = wrap::HttpsRequest(wrap::Url{"http://0.0.0.0:11502/AuthCheck"},
-		wrap::Header{{"Content-Type", "application/json"}},
+		wrap::Header{{"accept", "application/json"}},
 		wrap::Body{R"({"AuthID":"test03",
 										"AuthToken":"5GZF7OFY05P4TT"}
 										)"},
 		wrap::Method{ "POST" });
 					//wrap::Timeout{3000});
+	std::cout << std::endl << r.err << std::endl;
 	std::cout << std::endl << r.text << std::endl;
 }
 
