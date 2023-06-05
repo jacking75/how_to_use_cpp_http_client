@@ -6,39 +6,40 @@
 
 1. [GitHub](https://github.com/curl/curl)에서 가장 최신 버전의 **Release** 페이지로 이동
 
-![](../Images/libcurl/install_01.png)
+![install_01](../Images/libcurl/install_01.png)
 
 2. 소스 코드 압축 파일 다운로드
 
-![](../Images/libcurl/install_02.png)
+![install_02](../Images/libcurl/install_02.png)
 
 3. 압축 해제 후 폴더 내부의 `projects` 폴더로 이동
 
-![](../Images/libcurl/install_03.png)
+![install_03](../Images/libcurl/install_03.png)
 
 4. `generate.bat`를 실행하여 빌드에 필요한 소스 코드를 생성한다. (*소스 코드가 정상 생성됐다면 `generate.bat`이 자동 종료된다.*)
 
-![](../Images/libcurl/install_04.png)
+![install_04](../Images/libcurl/install_04.png)
 
-5. `projects/Windows` 폴더로 이동하여 아래 표를 참고하여 자신의 [`Visual Studio` 버전](https://github.com/curl/curl/tree/master/projects#building-with-visual-c)에 맞는 `.sln` 파일을 오픈한다.
+5. `projects/Windows` 폴더로 이동하여 자신의 [`Visual Studio` 버전](https://github.com/curl/curl/tree/master/projects#building-with-visual-c)에 맞는 `.sln` 파일을 오픈한다.
 
-![](../Images/libcurl/install_05.png)
+![install_05](../Images/libcurl/install_05.png)
 
-6. 빌드 환경을 선택하고 빌드
+6. 솔루션 빌드 환경을 선택한 후 빌드한다.
 
-![](../Images/libcurl/install_06.png)
+![install_06](../Images/libcurl/install_06.png)
 
-7. 빌드 성공 후 `~/build` 폴더에서 라이브러리 파일을 자신의 프로젝트로 복사한다.
+7. 빌드에 성공했다면, `~/build` 폴더에 생성된 라이브러리 파일들을 자신의 프로젝트로 복사한다. (*예제에서는 `DLL`로 빌드했다.*)
 
-![](../Images/libcurl/install_07.png)
+![install_07](../Images/libcurl/install_07.png)
 
-8. `~/include/curl` 폴더를 자신의 프로젝트에 복사한다. (*헤더 파일을 제외한 나머지 파일은 삭제해도 된다.*)
+8. `~/include/curl` 폴더를 자신의 프로젝트에 복사한다. (*헤더 파일(`*.h`)을 제외한 나머지 파일들은 삭제해도 된다.*)
 
-![](../Images/libcurl/install_08.png)
+![install_08](../Images/libcurl/install_08.png)
 
-9. 자신의 프로젝트에서 `libcurl` 라이브러리의 헤더 파일과 라이브러리 파일을 import한다.
+9. 자신의 프로젝트에서 `libcurl` 라이브러리의 헤더 파일과 라이브러리 파일을 Import한다.
 
-- 예제 솔루션 파일의 프로젝트 설정 부분 참고.
+- 여기서 C++ 라이브러리 Import 방법은 설명하지 않는다. 
+- 예제 코드( `../ExampleCodes/libcurlExample`)의 프로젝트 설정 부분 참고한다.
 
 
 

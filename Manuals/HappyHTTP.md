@@ -8,7 +8,7 @@
 
 ![install](../Images/HappyHTTP/install_01.png)
 
-2. 해당 소스코드를 프로젝트에 포함시킨다. (그림 상의 솔루션 이름이 `HappyHTTPExample`이지만, 실제로는 *`HappyHTTP`를 사용하는 다른 프로젝트라고 가정한다.*)
+2. 소스 코드를 자신의 프로젝트에 포함시킨다. (*그림에서의 솔루션 이름이 `HappyHTTPExample`이지만, 실제로는 `HappyHTTP` 라이브러리를 사용하는 별도의 프로젝트라고 가정한다.*)
 
 ![install](../Images/HappyHTTP/install_02.png)
 
@@ -21,10 +21,8 @@
 
 ## 라이브러리 설명
 
-- `Windows`, `Linux` 지원
-- 다른 라이브러리 설치없이 소스 코드만 있면 사용 가능
-
-TODO : 
+- `Windows`와 `Linux`를 지원한다.
+- 별도의 라이브러리 설치 없이 소스 코드만으로 사용가능하다.
 
 
 
