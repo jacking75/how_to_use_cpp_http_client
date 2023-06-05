@@ -47,9 +47,11 @@
 
 
 
-## 라이브러리 설명
+## 라이브러리 설명 (TODO)
 
-TODO : 
+- [libcurl 공식 Tutorial 번역](https://docs.google.com/document/d/e/2PACX-1vQeGYH_LQigaj8rh8Ers2MVoopAdCuFacnnH2DHKF1Ie0qxUlcdK5_uwwlnVah5zX9DR39kEONUILie/pub )
+
+
 
 <br>
 
