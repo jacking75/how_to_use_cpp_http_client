@@ -4,12 +4,10 @@
 // 게임 서버는 인증이 성공하면
 // - 이 유저의 default 게임데이터가 없다면 생성해줘야 한다.
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 
 namespace APIServer.Controllers;
@@ -23,6 +21,16 @@ public class AuthCheck : ControllerBase
     public AuthCheck()
     {
         Init();
+    }
+
+    [HttpGet]
+    public PkAuthCheckResponse Get(PkAuthCheckRequest request)
+    {
+        PkAuthCheckResponse response = new();
+
+        response.Result = Authenticate(request.AuthID, request.AuthToken);
+
+        return response;
     }
 
     [HttpPost]

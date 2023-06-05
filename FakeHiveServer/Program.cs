@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,4 +17,3 @@ app.UseEndpoints(endpoints => { _ = endpoints.MapControllers(); });
 #pragma warning restore ASP0014
 
 app.Run(configuration["ServerAddress"]);
-

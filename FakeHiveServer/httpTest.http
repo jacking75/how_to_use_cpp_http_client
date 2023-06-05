@@ -1,4 +1,5 @@
-﻿POST http://localhost:11502/AuthCheck
+﻿###
+POST http://localhost:11502/AuthCheck
 Content-Type: application/json
 
 {
@@ -15,5 +16,3 @@ Content-Type: application/json
   "PW":"123qwe",
   "NickName": "aaa"
 }
-
-

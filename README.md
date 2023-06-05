@@ -10,7 +10,7 @@ http 요청에 답변을 주는 더미용 서버로 `FakeHiveServer`(FakeHiveSer
 2개의 API가 있으며 모두 `POST`에 JSON 포맷을 사용한다.  
 ASP.NET Core(.NET 7)를 사용하였다.  
 
-API: 
+## API: 
 ```
 POST http://localhost:11502/AuthCheck
 Content-Type: application/json
@@ -32,6 +32,7 @@ Content-Type: application/json
 ```  
 	 
 `AuthCheck` 요청에 사용할 수 있는 것은 `FakeHiveServer\Controllers\AuthCheckController.cs` 에서 `void Init()` 함수 내용을 본다.  	 
+
 `CreateAccount` 요청에 사용할 수 있는 것은 `FakeHiveServer\Controllers\InAppCheckController.cs` 에서 `void Init()` 함수 내용을 본다.  	 
 	  
 <br>      
@@ -44,19 +45,44 @@ Content-Type: application/json
 - 백업 목적으로 [원 저장소](https://github.com/mingodad/HappyHTTP )에서 가져온 것이다.
 - Windows, Linux 지원  
 - 사용하기 쉬움. 예제 코드가 있음
+
+### JSON 사용법
+```cpp
+void Test4()
+{
+	puts("-----------------Test4------------------------");
+
+	const char* header[] = {
+		"Connection", "close",
+		"Content-type", "application/json",
+		"Accept", "text/plain",
+		0
+	};
+
+	auto body = R"(
+		{
+			"AuthID":"cov1013@com2us.com",
+			"AuthToken":"Test"
+		}
+	)";
+
+	happyhttp::Connection conn("127.0.0.1", 11502);
+	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
+	conn.request("GET",
+		"/AuthCheck",
+		header, 
+		(const unsigned char*)body,
+		strlen(body)
+	);
+
+	while (conn.outstanding() == true)
+	{
+		conn.pump();
+	}
+}
+```
   
 <br>    
-
-
-## Httplib (cpp-httplib) 
-- A C++11 single-file header-only cross platform HTTP/HTTPS library
-- This library uses 'blocking' socket I/O
-  
-- [Httplib (cpp-httplib) Sample](https://cdecl.github.io/dev/cpp-httplib-sample/ )
-- [cpp-httplib + nlohmann.json를 사용하여 http 요청하기](https://docs.google.com/document/d/e/2PACX-1vTpb2n7xjHJAR0g8JEEI0BzDgzZAJkfEVTUJs5NL-yogwRGqs_nRNml99DQohaUdOxjhy1ffjaWzLtR/pub )  
-    - [nlohmann.json](https://github.com/nlohmann/json )
-  
-<br>  
   
 
 ## WNetWrap
@@ -65,11 +91,15 @@ Content-Type: application/json
 - Win32 API인 `WinInet`을 사용하여 별도의 외부라이브러리가 필요 없고, HTTPS도 지원. 당연히 Windows만 지원한다  
 - **문제 있음** : `http://localhost:11502/AuthCheck` 로 POST 방식으로 json 데이터를 보내지 못함
    
-예제 코드: POST Requests  
-```
-wrap::Response r = wrap::HttpsRequest(wrap::Url{"http://www.httpbin.org/post"},
-                   wrap::Payload{{"key", "value"}}, 
-		   wrap::Method{"POST"});
+### 예제 코드: POST Request
+
+```cpp
+wrap::Response r = wrap::HttpsRequest(
+	wrap::Url{"http://www.httpbin.org/post"},
+	wrap::Payload{{"key", "value"}}, 
+	wrap::Method{"POST"}
+);
+
 std::cout << r.text << std::endl;
 
 /*
@@ -95,18 +125,19 @@ std::cout << r.text << std::endl;
   
 
 ## libcurl    
-우분투에서 라이브러리 설치하기  
+
+- [libcurl 공식 Tutorial 번역](https://docs.google.com/document/d/e/2PACX-1vQeGYH_LQigaj8rh8Ers2MVoopAdCuFacnnH2DHKF1Ie0qxUlcdK5_uwwlnVah5zX9DR39kEONUILie/pub )
+
+### 우분투에서 라이브러리 설치하기  
+
 ```
 sudo apt install libcurl4-openssl-dev
 ```
-
-- [libcurl 공식 Tutorial 번역](https://docs.google.com/document/d/e/2PACX-1vQeGYH_LQigaj8rh8Ers2MVoopAdCuFacnnH2DHKF1Ie0qxUlcdK5_uwwlnVah5zX9DR39kEONUILie/pub )
      
-  
 
-### 간단한 Post 요청 코드
-[출처](https://qiita.com/ekzemplaro/items/97bc000576a6210a3068 )     
-```
+### 간단한 Post 요청 코드 ([출처](https://qiita.com/ekzemplaro/items/97bc000576a6210a3068 ))
+
+```cpp
 #include	<string>
 #include	<iostream>
 #include	<cstring>
@@ -171,12 +202,11 @@ int main (int argc,char *argv[])
 ```  
   
 
-### 간단한 Get 요청 코드
-[출처](https://qiita.com/ekzemplaro/items/e19daeef842b376a37ce )     
-```
+### 간단한 Get 요청 코드 ([출처](https://qiita.com/ekzemplaro/items/e19daeef842b376a37ce ))
+
+```cpp
 #include	<string>
 #include	<iostream>
-
 #include	<curl/curl.h>
 
 using namespace std;
@@ -233,7 +263,7 @@ int main (int argc,char *argv[])
 <br>    
   
 
-## curlcpp
+### curlcpp
 - `libcurl`의 C++ 버전이다.  
 - [GitHub](https://github.com/JosephP91/curlcpp )  
 - [공식사이트](https://josephp91.github.io/curlcpp  )
@@ -241,15 +271,14 @@ int main (int argc,char *argv[])
 
 <br>    
 
-
-## curly.hpp
+### curly.hpp
 - [공식 사이트](http://matov.me/curly.hpp/ )
 - Simple cURL C++17 wrapper  
 - Asynchronous requests
 - `libcurl` 라이브러리 설치가 필요하다
   
-예제코드: POST  
-```
+#### 예제코드: POST  
+```cpp
 auto request = net::request_builder()
     .method(net::http_method::POST)
     .url("http://www.httpbin.org/post")
@@ -283,39 +312,42 @@ std::cout << "Content Length: " << response.headers["content-length"] << std::en
 ```
 
 <br>       
-  
 
-## Curlite
+### Curlite
 - [GitHub](https://github.com/grynko/curlite )  
 - 사용하기 쉽다
 - C++ 11 이상 필요
 - `libcurl` 라이브러리 설치가 필요하다  
   
 <br>
-  
 
-## Swish
+### Swish
 - [GitHub](https://github.com/lamarrr/swish )    
 - C++ 17 이상 필요
 - `libcurl` 라이브러리 설치가 필요하다 
   
 <br>  
+
+## Httplib (cpp-httplib) 
+- A C++11 single-file header-only cross platform HTTP/HTTPS library
+- This library uses **'blocking'** socket I/O
   
+- [GitHub](https://github.com/yhirose/cpp-httplib)
+	- [Sample](https://cdecl.github.io/dev/cpp-httplib-sample/ )
+	- [cpp-httplib + nlohmann.json를 사용하여 http 요청하기](https://docs.google.com/document/d/e/2PACX-1vTpb2n7xjHJAR0g8JEEI0BzDgzZAJkfEVTUJs5NL-yogwRGqs_nRNml99DQohaUdOxjhy1ffjaWzLtR/pub )  
+    	- [nlohmann.json](https://github.com/nlohmann/json )
+  
+<br>  
 
 ## malloy     
 - [GitHub](https://github.com/tectu/malloy )
 - Malloy is a small, embeddable HTTP & WebSocket server & client built on top of boost.
 - Windows (with both MSVC and MinGW), Linux (Ubuntu, Debian, Fedora, ...), MacOS, FreeBSD
+- **boost Libraries 필요**  
    
 <br>   
-  
   
 ## EasyHttp
 - [GitHub](https://github.com/sony/easyhttpcpp )
 - A cross-platform HTTP client library with a focus on usability and speed. \
-- POCO C++ Libraries 필요  
-
-
-
-
-
+- **POCO C++ Libraries 필요**  
