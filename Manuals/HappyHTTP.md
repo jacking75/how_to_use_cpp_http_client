@@ -18,10 +18,17 @@
 
 ## 라이브러리 설명
 
-- `Windows`와 `Linux`를 지원한다.
+- `Windows`와 `Linux`를 지원한다. (*해당 문서에서는 `Windows` 환경에서의 사용법만 다룬다.*)
 - 응답 데이터를 콜백 함수(`OnBegin`, `OnData`, `OnComplete`)를 통해 핸들링 할 수 있다.
-- 요청 후 응답을 받기위해 무한 대기하며, 응답 데이터를 모두 수신할 때 까지 루프를 계속 돈다.
 - 별도의 라이브러리 설치 없이, 해당 라이브러리의 소스 코드만으로 사용 가능하다.
+- 요청 후 응답을 받기 위해 별도의 `while` 문을 사용하여 모든 응답 데이터를 수신받을 때 까지 `Folling` 해야한다.
+```cpp
+while (conn.outstanding())	// 모든 응답 데이터를 수신했는가?
+{
+	// 응답 데이터를 계속 수신한다.
+	conn.pump();
+}
+```
 
 ## 예제코드
 
@@ -33,8 +40,6 @@
 void OnBegin(const happyhttp::Response* response, void* userData)
 {
 	printf("BEGIN (%d %s)\n", response->getstatus(), response->getreason());
-
-	count = 0;
 }
 ```
 
@@ -44,8 +49,6 @@ void OnBegin(const happyhttp::Response* response, void* userData)
 void OnData(const happyhttp::Response* response, void* userData, const unsigned char* responseData, int responseDataLength)
 {
 	fwrite(responseData, 1, responseDataLength, stdout);
-
-	count += responseDataLength;
 }
 ```
 
@@ -54,7 +57,7 @@ void OnData(const happyhttp::Response* response, void* userData, const unsigned 
 ```cpp
 void OnComplete(const happyhttp::Response* response, void* userData)
 {
-	printf("\nCOMPLETE (%d bytes)\n", count);
+	printf("\nCOMPLETE\n";
 }
 ```
 
@@ -62,11 +65,15 @@ void OnComplete(const happyhttp::Response* response, void* userData)
 ```cpp
 void SendRequestMethodGet()
 {
+	// 연결
 	happyhttp::Connection conn("www.postman-echo.com", 80);
+
+	// 콜백 함수 등록
 	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
 
 	const char* body = "fruit=mango&price=3";
 
+	// 요청 패킷 송신
 	conn.request(
 		"GET",
 		"/get",
@@ -75,6 +82,7 @@ void SendRequestMethodGet()
 		(int)strlen(body)
 	);
 
+	// 응답 데이터 수신 처리 완료 대기
 	while (conn.outstanding())
 	{
 		conn.pump();
@@ -86,6 +94,7 @@ void SendRequestMethodGet()
 ```cpp
 void SendRequestMethodPost()
 {
+	// 헤더 설정
 	const char* headers[] =
 	{
 		"Connection", "close",
@@ -96,9 +105,13 @@ void SendRequestMethodPost()
 
 	const char* body = "fruit=mango&price=3";
 
+	// 연결
 	happyhttp::Connection conn("www.postman-echo.com", 80);
+
+	// 콜백 함수 등록
 	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
 
+	// 요청 패킷 송신
 	conn.request(
 		"POST",
 		"/post",
@@ -107,6 +120,7 @@ void SendRequestMethodPost()
 		(int)strlen(body)
 	);
 
+	// 응답 데이터 수신 처리 완료 대기
 	while (conn.outstanding())
 	{
 		conn.pump();
@@ -121,18 +135,26 @@ void SendPostRequest_LowLevelInterface()
 	const char* body = "fruit=mango&price=3";
 	auto bodyLen = (int)strlen(body);
 
+	// 연결
 	happyhttp::Connection conn("www.postman-echo.com", 80);
-	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
 
+	// 헤더 설정
 	conn.putheader("Connection", "close");
 	conn.putheader("Content-Length", bodyLen);
 	conn.putheader("Content-type", "application/x-www-form-urlencoded");
 	conn.putheader("Accept", "text/plain");
 	conn.endheaders();
 
+	// 콜백 함수 등록
+	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
+
+	// 요청 방식 설정
 	conn.putrequest("POST", "/post");
+
+	// 송신
 	conn.send((const unsigned char*)body, bodyLen);
 
+	// 응답 데이터 수신 처리 완료 대기
 	while (conn.outstanding())
 	{
 		conn.pump();
@@ -144,6 +166,7 @@ void SendPostRequest_LowLevelInterface()
 ```cpp
 void SendJsonRequestMethodGet(const std::string& host, const std::string& uri, const int port, const std::string body)
 {
+	// 헤더 설정
 	const char* header[] = {
 		"Connection", "close",
 		"Content-type", "application/json",
@@ -151,9 +174,13 @@ void SendJsonRequestMethodGet(const std::string& host, const std::string& uri, c
 		0
 	};
 
+	// 연결
 	happyhttp::Connection conn(host.c_str(), port);
+
+	// 콜백 함수 등록
 	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
 
+	// 요청 패킷 송신
 	conn.request(
 		"GET",
 		uri.c_str(),
@@ -162,6 +189,7 @@ void SendJsonRequestMethodGet(const std::string& host, const std::string& uri, c
 		strlen(body.c_str())
 	);
 
+	// 응답 데이터 수신 처리 완료 대기
 	while (conn.outstanding() == true)
 	{
 		conn.pump();
@@ -173,6 +201,7 @@ void SendJsonRequestMethodGet(const std::string& host, const std::string& uri, c
 ```cpp
 void SendJsonRequestMethodPost(const std::string& host, const std::string& uri, const int port, const std::string body)
 {
+	// 헤더 세팅
 	const char* header[] = {
 		"Connection", "close",
 		"Content-type", "application/json",
@@ -180,9 +209,13 @@ void SendJsonRequestMethodPost(const std::string& host, const std::string& uri, 
 		0
 	};
 
+	// 연결
 	happyhttp::Connection conn(host.c_str(), port);
+
+	// 콜백 함수 등록
 	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
 
+	// 요청 패킷 송신
 	conn.request(
 		"POST",
 		uri.c_str(),
@@ -191,6 +224,8 @@ void SendJsonRequestMethodPost(const std::string& host, const std::string& uri, 
 		strlen(body.c_str())
 	);
 
+
+	// 응답 데이터 수신 처리 완료 대기
 	while (conn.outstanding() == true)
 	{
 		conn.pump();

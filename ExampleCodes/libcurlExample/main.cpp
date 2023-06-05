@@ -3,59 +3,105 @@
 #include <cstring>
 #include <curl/curl.h>
 
-using namespace std;
-
-size_t callBackFunk(char* ptr, size_t size, size_t nmemb, string* stream)
+size_t OnResponseData(char* ptr, size_t size, size_t nmemb, std::string* stream)
 {
 	int realsize = size * nmemb;
-	stream->append(ptr, realsize);
+
+	std::cout << ptr << std::endl;
 
 	return realsize;
 }
 
-void main()
+void SendJsonRequestMethodGet(const std::string& URL, const std::string& body)
 {
 	CURL* curl;
-	CURLcode res;
 	curl = curl_easy_init();
 
-	std::string URL = "http://127.0.0.1:11502/AuthCheck";
-	std::string body = "{\"AuthID\": \"TEST1\", \"AuthToken\":\"Test\"}";
+	if (curl == NULL)
+	{
+		printf("Failed intialize curl instance");
+		return;
+	}
+
+	CURLcode res;
 
 	// Header 세팅
 	curl_slist* header = NULL;
 	header = curl_slist_append(header, "Content-Type: application/json");
 
-	string chunk;
+	curl_easy_setopt(curl, CURLOPT_URL, URL.c_str());
 
-	if (curl)
+	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
+
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
+
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body.length());
+
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, OnResponseData);
+
+	res = curl_easy_perform(curl);
+
+	curl_easy_cleanup(curl);
+	curl_slist_free_all(header);
+
+	if (res != CURLE_OK)
 	{
-		curl_easy_setopt(curl, CURLOPT_URL, URL.c_str());
-
-		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
-
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
-
-		curl_easy_setopt(curl, CURLOPT_POST, 1L);
-
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body.length());
-
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, callBackFunk);
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&chunk);
-
-		res = curl_easy_perform(curl);
-
-		curl_easy_cleanup(curl);
-		curl_slist_free_all(header);
-
-		if (res != CURLE_OK)
-		{
-			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-		}
-
-		std::cout << "------------Result" << std::endl;
-		std::cout << chunk << std::endl;
+		fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
 	}
+}
+
+void SendJsonRequestMethodPost(const std::string& URL, const std::string& body)
+{
+	CURL* curl;
+	curl = curl_easy_init();
+
+	if(curl == NULL)
+	{
+		printf("Failed intialize curl instance");
+		return;
+	}
+
+	CURLcode res;
+
+	// Header 세팅
+	curl_slist* header = NULL;
+	header = curl_slist_append(header, "Content-Type: application/json");
+
+	curl_easy_setopt(curl, CURLOPT_URL, URL.c_str());
+
+	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
+
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
+
+	curl_easy_setopt(curl, CURLOPT_POST, 1L);
+
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body.length());
+
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, OnResponseData);
+
+	res = curl_easy_perform(curl);
+
+	curl_easy_cleanup(curl);
+	curl_slist_free_all(header);
+
+	if (res != CURLE_OK)
+	{
+		fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+	}
+}
+
+void main()
+{
+	const std::string AUTH_CHECK_URL = "http://127.0.0.1:11502/AuthCheck";
+	std::string authCheckData = "{\"AuthID\": \"test01\", \"AuthToken\":\"DUWPQCFN5DQF4P\"}";
+	SendJsonRequestMethodGet(AUTH_CHECK_URL, authCheckData);
+	SendJsonRequestMethodPost(AUTH_CHECK_URL, authCheckData);
+
+	const std::string INAPP_CHECK_URL = "http://127.0.0.1:11502/InAppCheck";
+	std::string inAppCheckData = "{\"Receipt\": \"WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d\"}";
+	SendJsonRequestMethodPost(INAPP_CHECK_URL, inAppCheckData);
 }

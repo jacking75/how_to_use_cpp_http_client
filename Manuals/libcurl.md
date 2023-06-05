@@ -54,69 +54,104 @@
 
 ## 예제코드
 
-### Method : GET
-
+### GET Request (JSON)
 ```cpp
-#include <stdio.h>
-#include 
-```
-
-```cpp
-#include <curl.h>
-#include <string>
-#include <iostream>
-#include <cstring>
-
-using namespace std;
-
-size_t callBackFunk(char* ptr, size_t size, size_t nmemb, string* stream)
-{
-	int realsize = size * nmemb;
-	stream->append(ptr, realsize);
-
-	return realsize;
-}
-
-void main()
+void SendJsonRequestMethodGet(const std::string& URL, const std::string& body)
 {
 	CURL* curl;
+	curl = curl_easy_init();
+
+	if (curl == NULL)
+	{
+		printf("Failed intialize curl instance");
+		return;
+	}
+
 	CURLcode res;
 
-	std::string strTargetURL = "http://127.0.0.1:11502/AuthCheck";
-	std::string strResourceJSON = "{\"AuthID\": \"TEST1\", \"AuthToken\":\"Test\"}";
+	// Header 세팅
+	curl_slist* header = NULL;
+	header = curl_slist_append(header, "Content-Type: application/json");
 
-	curl_slist* headerlist = NULL;
-	headerlist = curl_slist_append(headerlist, "Content-Type: application/json");
+	curl_easy_setopt(curl, CURLOPT_URL, URL.c_str());
 
-	curl_global_init(CURL_GLOBAL_ALL);
+	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
 
-	curl = curl_easy_init();
-	string chunk;
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
 
-	if (curl)
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body.length());
+
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, OnResponseData);
+
+	res = curl_easy_perform(curl);
+
+	curl_easy_cleanup(curl);
+	curl_slist_free_all(header);
+
+	if (res != CURLE_OK)
 	{
-		curl_easy_setopt(curl, CURLOPT_URL, strTargetURL.c_str());
-		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerlist);
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
-		curl_easy_setopt(curl, CURLOPT_POST, 1L);
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, strResourceJSON.c_str());
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strResourceJSON.length());
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, callBackFunk);
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&chunk);
-
-		res = curl_easy_perform(curl);
-
-		curl_easy_cleanup(curl);
-		curl_slist_free_all(headerlist);
-
-		if (res != CURLE_OK)
-		{
-			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-		}
-
-		std::cout << "------------Result" << std::endl;
-		std::cout << chunk << std::endl;
+		fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
 	}
+}
+```
+
+### POST Request (JSON)
+```cpp
+void SendJsonRequestMethodPost(const std::string& URL, const std::string& body)
+{
+	CURL* curl;
+	curl = curl_easy_init();
+
+	if(curl == NULL)
+	{
+		printf("Failed intialize curl instance");
+		return;
+	}
+
+	CURLcode res;
+
+	// Header 세팅
+	curl_slist* header = NULL;
+	header = curl_slist_append(header, "Content-Type: application/json");
+
+	curl_easy_setopt(curl, CURLOPT_URL, URL.c_str());
+
+	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
+
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
+
+	curl_easy_setopt(curl, CURLOPT_POST, 1L);
+
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body.length());
+
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, OnResponseData);
+
+	res = curl_easy_perform(curl);
+
+	curl_easy_cleanup(curl);
+	curl_slist_free_all(header);
+
+	if (res != CURLE_OK)
+	{
+		fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+	}
+}
+```
+
+### 사용하는 부분
+```cpp
+{
+	const std::string AUTH_CHECK_URL = "http://127.0.0.1:11502/AuthCheck";
+	std::string authCheckData = "{\"AuthID\": \"test01\", \"AuthToken\":\"DUWPQCFN5DQF4P\"}";
+	SendJsonRequestMethodGet(AUTH_CHECK_URL, authCheckData);
+	SendJsonRequestMethodPost(AUTH_CHECK_URL, authCheckData);
+
+	const std::string INAPP_CHECK_URL = "http://127.0.0.1:11502/InAppCheck";
+	std::string inAppCheckData = "{\"Receipt\": \"WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d\"}";
+	SendJsonRequestMethodPost(INAPP_CHECK_URL, inAppCheckData);
 }
 ```
