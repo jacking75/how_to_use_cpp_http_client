@@ -1,13 +1,9 @@
-# C++에서 http 요청하는 방법
-- C++ 이후에 나온 언어들은 인터넷 시대에 나와서 대부분 표준 라이브러리에서 http 통신 기능을 지원하고 있다.  
-- 그러나 C++는 아직까지 표준 라이브러리에서 http 통신을 지원하지 않아서 http 요청을 할 때 타 언어에 비해서 불편하다.  
-- 해당 문서에서는 `Win32 API`, 외부 라이브러리를 사용하여 http 요청하는 방법에 대해 설명한다.
-
-
+# `C++`로 `HTTP` 통신하기
+- `C++` 이후에 나온 언어들은 대부분 표준 라이브러리에서 `HTTP` 통신 기능을 지원하고 있다.  
+- 그러나 `C++`는 아직 표준 라이브러리에서 `HTTP` 통신을 지원하지 않기 때문에 `HTTP` 사용이 다른 언어에 비해 불편하다.
+- 해당 문서에서는 `C++`에서 `HTTP` 통신을 위해 사용할 수 있는 외부 라이브러리에 대한 소개와 설치 방법 및 간단한 사용 방법에 대해 설명한다.
 
 <br>      
-
-
     
 # 테스트용 서버
 
@@ -40,8 +36,8 @@ Content-Type: application/json
   "AuthToken":"5GZF7OFY05P4TT"
 }
 
-# POST CreateAccount
-POST http://localhost:11500/CreateAccount
+# POST InAppCheckController
+POST http://localhost:11500/InAppCheckController
 Content-Type: application/json
 
 {
@@ -51,18 +47,63 @@ Content-Type: application/json
 }
 ```  
 
-### 패킷 작성 시 참고 사항
+### `AuthCheck` 패킷 작성 시 참고 사항
 
-- `AuthCheck` 요청에 사용할 수 있는 `AuthID` 목록은 `FakeHiveServer\Controllers\AuthCheckController.cs`의 `void Init()` 함수를 참고한다.
-- `CreateAccount` 요청에 사용할 수 있는 것은 `AuthToken` 목록은 `FakeHiveServer\Controllers\InAppCheckController.cs`의 `void Init()` 함수를 참고한다.
+- `AuthCheck` 요청에 사용할 수 있는 `AuthID` 목록은 다음과 같다.
+- 코드 경로 : `./FakerHiveServer/Controller/AuthCheckController.cs`
+```CSharp
+void Init()
+{
+	authUserData.Add("test01", "DUWPQCFN5DQF4P");
+	authUserData.Add("test02", "DYG5R07M7RUV07");
+	authUserData.Add("test03", "5GZF7OFY05P4TT");
+	authUserData.Add("test04", "94ILRSD4LRXE6N");
+	authUserData.Add("test05", "GPKJ442KR1BK0U");
+	authUserData.Add("test06", "P2H95LNF6NT8UC");
+	authUserData.Add("test07", "JXOU845OYZJUXG");
+	authUserData.Add("test08", "N21SK6AXKQWS5B");
+	authUserData.Add("test09", "X7S4WCTKMY6YVK");
+	authUserData.Add("test10", "HIB0KU1A6FGVT1");
+	authUserData.Add("test11", "0HM20Q8A4GFCBX");
+	authUserData.Add("test12", "9IPHAAF6P88BMP");
+	authUserData.Add("test13", "D58RFSAAAP1RWG");
+	authUserData.Add("test14", "MYQOR56M574OIG");
+	authUserData.Add("test15", "M0A7BOS0CVVN5L");
+	authUserData.Add("test16", "0KJLTAMCVQBRLX");
+	authUserData.Add("test17", "1E4XH0PL1XRGI8");
+	authUserData.Add("test18", "FK4K9SYSB63L7R");
+}
+```
+
+### `InAppCheckController` 패킷 작성 시 참고 사항
+
+- `InAppCheckController` 요청에 사용할 수 있는 것은 `AuthToken` 목록은 다음과 같다.
+- 코드 경로 : `./FakerHiveServer/Controller/InAppCheckController.cs`
+```CSharp
+void Init()
+{
+	_receiptList.Add("QKsM2oPCeUiLWlwpTqXN5fIr4w0I7gMEB73573W8hGIn0WU9bQjNnxA7nQxhcvMP");
+	_receiptList.Add("WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d");
+	_receiptList.Add("1OjwHKctOp29VE1KLK75BbXYxKpTHufOOAwcCWo32xFAvthQdyX2UaOECIxIl802");
+	_receiptList.Add("NuIDV687iXasG5wFuTQbtpiAHBVbAjwfpI5dMUHfw76PBipS7cheFc0SksK6R2Gn");
+	_receiptList.Add("FSrhNe0gbFAKjjY7ZN6FPK1ImWHsQrsyMnyWqR14JntyLofloticXJ7oFVUpSLBd");
+	_receiptList.Add("KEUqnainhuHKThpCxXnT7vGr0tMQ6IEL3pu764kkGUNTtdhAxcT2umID0LmVNi7K");
+	_receiptList.Add("Cmu2JCJsVndrsCpFMg520SAY9nrwVSSFIQor4FXJpaRk4VXpNtsNwa2Yc9gIbLuH");
+	_receiptList.Add("7IJi2nTCMVZ5HbE3KF8cUJ73Uw7f84aQhMMatjf21ZxajeBMffQePfN89uROSB5n");
+	_receiptList.Add("gXIoGpNMkWcO74FQPlSNvUhUqmGp7kXvh5bZHCJCDr7ePXfkyyJTrwFBGYO5qr8b");
+	_receiptList.Add("wglqUxLmKZjr3L6xUwrOT0ijNKqFY9PwDA4f143vUKB6rP4Sd1iScPakuRP0LMF2");
+	_receiptList.Add("AFwoseSvylxeyhvssAtLKRUBrq71wXgW5Lrp62IOPYon8U1sNJGC5iMuLpt8yWPZ");
+	_receiptList.Add("XbRd1nN5ct0IKWNHiULeuxhnLOfhuqHs5vOvRCKVPh0cSQrZk9Dy8q6atVkY3Bg6");
+	_receiptList.Add("lOkJrV8drexk1aAsLrphZijejTYruYGnjXe0G6r27iJiKhJxFTi1Hc3RYhQ5m7hq");
+	_receiptList.Add("dk8IbTxH1Kgn9GFqA8VV0EqEDFUI2P5aXAEmf2nhMJsmNO86IgLSwVgNEGpXHxWg");
+	_receiptList.Add("YOMGwAkbASNEgMibM63w4PTVKa43cHmv6rfdvHGaZjdU19f5iIE9y1EiXUyALO0R");
+	_receiptList.Add("aepIhSInxFk68yvdk66cwfskjti6sBKTqPBHo6vdI5J664EpOVBYN4lwqk89n1YJ");
+}
+```
 	  
-
-
 <br>      
   
-
-  
-# 외부 라이브러리 소개
+# 외부 라이브러리
   
 ## [HappyHTTP](./Manuals/HappyHTTP.md)
 
