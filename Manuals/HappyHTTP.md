@@ -16,14 +16,10 @@
 
 ![install](../Images/HappyHTTP/install_02.png)
 
-<br>
-
 ## 라이브러리 설명
 
 - `Windows`와 `Linux`를 지원한다.
 - 별도의 라이브러리 설치 없이, 해당 라이브러리의 소스 코드만으로 사용 가능하다.
-
-<br>
 
 ## 예제 코드
 

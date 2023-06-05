@@ -1,10 +1,10 @@
 # `libcurl` 사용법
 
-예제 코드 : `../ExampleCodes/libcurlExample`
+예제 코드 : `~/ExampleCodes/libcurlExample`
 
 ## 들어가기전에
 
-해당 문서에서는 `Windows` 설치 방법에 대해서만 설명한다.
+해당 문서에서는 `Windows` 환경에서의 설치 방법만 설명한다.
 
 ## 라이브러리 설치하기
 
@@ -42,24 +42,12 @@
 
 9. 자신의 프로젝트에서 `libcurl` 라이브러리의 헤더 파일과 라이브러리 파일을 Import한다.
 
-- 여기서 C++ 라이브러리 Import 방법은 설명하지 않는다. 
-- 예제 코드( `../ExampleCodes/libcurlExample`)의 프로젝트 설정 부분 참고한다.
-
-
-
-<br>
-
-
+- 해당 문서에서는 `Visual Studio`에서 `C++ 라이브러리`를 `Import`하는 방법에 대해서는 설명하지 않는다. 
+- 예제 코드( `~/ExampleCodes/libcurlExample`)의 프로젝트 설정 부분 참고한다.
 
 ## 라이브러리 설명 (TODO)
 
 - [libcurl 공식 Tutorial 번역](https://docs.google.com/document/d/e/2PACX-1vQeGYH_LQigaj8rh8Ers2MVoopAdCuFacnnH2DHKF1Ie0qxUlcdK5_uwwlnVah5zX9DR39kEONUILie/pub )
-
-
-
-<br>
-
-
 
 ## 예제코드
 

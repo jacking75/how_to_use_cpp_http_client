@@ -1,6 +1,6 @@
 # `WNetWrap` 사용법
 
-예제 코드 : `../ExampleCodes/WNetWrapExample`
+예제 코드 : `~/ExampleCodes/WNetWrapExample`
 
 ## 들어가기전에
 
@@ -8,7 +8,7 @@
 
 ## 라이브러리 설치하기
 
-1. `../ExampleCodes/WNetWrapExample`에서 `wnetwrap.cpp`와 `wnetwrap.h`를 자신의 프로젝트 폴더 복사한다.
+1. `~/ExampleCodes/WNetWrapExample`에서 `wnetwrap.cpp`와 `wnetwrap.h`를 자신의 프로젝트 폴더 복사한다.
 
 ![install](../Images/WNetWrap/install_01.png)
 
