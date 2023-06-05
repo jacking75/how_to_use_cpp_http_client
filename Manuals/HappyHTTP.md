@@ -1,10 +1,14 @@
 # `HappyHTTP` 사용법
 
-예제 코드 : `../ExampleCodes/HappyHTTPExample`
+예제 코드 : `~/ExampleCodes/HappyHTTPExample`
+
+## 들어가기전에
+
+해당 문서의 예제 코드(`~/ExampleCodes/HappyHTTPExample`)에서 사용되는 라이브러리 소스 코드는 원본 코드 빌드 시 발생하는 다양한 컴파일 오류와 에러 사항들을 수정한 코드이며, 실제 원본이 필요한 경우 [이곳](https://github.com/mingodad/HappyHTTP)을 참고한다.
 
 ## 라이브러리 설치하기
 
-1. `../ExampleCodes/HappyHTTPExample`에서 `happyhttp.cpp`와 `happyhttp.h`를 자신의 프로젝트 폴더 복사한다.
+1. `~/ExampleCodes/HappyHTTPExample`에서 `happyhttp.cpp`와 `happyhttp.h`를 자신의 프로젝트 폴더 복사한다.
 
 ![install](../Images/HappyHTTP/install_01.png)
 
@@ -12,23 +16,14 @@
 
 ![install](../Images/HappyHTTP/install_02.png)
 
-
-
-
 <br>
-
-
 
 ## 라이브러리 설명
 
 - `Windows`와 `Linux`를 지원한다.
-- 별도의 라이브러리 설치 없이 소스 코드만으로 사용가능하다.
-
-
+- 별도의 라이브러리 설치 없이, 해당 라이브러리의 소스 코드만으로 사용 가능하다.
 
 <br>
-
-
 
 ## 예제 코드
 

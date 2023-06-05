@@ -2,6 +2,10 @@
 
 예제 코드 : `../ExampleCodes/libcurlExample`
 
+## 들어가기전에
+
+해당 문서에서는 `Windows` 설치 방법에 대해서만 설명한다.
+
 ## 라이브러리 설치하기
 
 1. [GitHub](https://github.com/curl/curl)에서 가장 최신 버전의 **Release** 페이지로 이동
