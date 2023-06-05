@@ -406,3 +406,4 @@ FodyWeavers.xsd
 
 # Custom
 00_ServerBin
+_*
