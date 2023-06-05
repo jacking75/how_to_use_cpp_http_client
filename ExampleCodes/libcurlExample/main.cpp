@@ -1,8 +1,7 @@
 #include <string>
 #include <iostream>
 #include <cstring>
-
-#include "curl.h"
+#include <curl/curl.h>
 
 using namespace std;
 
@@ -18,34 +17,38 @@ void main()
 {
 	CURL* curl;
 	CURLcode res;
-
-	std::string strTargetURL = "http://127.0.0.1:11502/AuthCheck";
-	std::string strResourceJSON = "{\"AuthID\": \"TEST1\", \"AuthToken\":\"Test\"}";
-
-	curl_slist* headerlist = NULL;
-	headerlist = curl_slist_append(headerlist, "Content-Type: application/json");
-
-	curl_global_init(CURL_GLOBAL_ALL);
-
 	curl = curl_easy_init();
+
+	std::string URL = "http://127.0.0.1:11502/AuthCheck";
+	std::string body = "{\"AuthID\": \"TEST1\", \"AuthToken\":\"Test\"}";
+
+	// Header ¼¼ÆÃ
+	curl_slist* header = NULL;
+	header = curl_slist_append(header, "Content-Type: application/json");
+
 	string chunk;
 
 	if (curl)
 	{
-		curl_easy_setopt(curl, CURLOPT_URL, strTargetURL.c_str());
-		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerlist);
+		curl_easy_setopt(curl, CURLOPT_URL, URL.c_str());
+
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
+
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
+
 		curl_easy_setopt(curl, CURLOPT_POST, 1L);
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, strResourceJSON.c_str());
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strResourceJSON.length());
+
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body.length());
+
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, callBackFunk);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&chunk);
 
 		res = curl_easy_perform(curl);
 
 		curl_easy_cleanup(curl);
-		curl_slist_free_all(headerlist);
+		curl_slist_free_all(header);
 
 		if (res != CURLE_OK)
 		{

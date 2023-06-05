@@ -1,42 +1,78 @@
 ﻿#include <iostream>
 #include "wnetwrap.h"
 
-void SimpleGet()
+void SendRequestMethodGet()
 {
-	wrap::Response r;
-	r = wrap::HttpsRequest(wrap::Url{ "https://www.postman-echo.com/get" },
-		wrap::Header{ {"Referer", "www.bla.com"}, { "Content-Type","*/*" } },
-		wrap::Parameters{ {"fruit", "mango"}, { "price","£3" } }
+	wrap::Response res = wrap::HttpsRequest(
+		wrap::Url{ "https://www.postman-echo.com/get" },
+		wrap::Parameters{{"fruit", "mango"}, { "price","£3" }}
 	);
 
-	std::cout << std::endl << r.text << std::endl;
+	std::cout << res.text << std::endl;
 }
 
-void PostJson()
+void SendRequestMethodPost()
 {
-	wrap::Response r = wrap::HttpsRequest(
-		wrap::Url{ "http://127.0.0.1:11502/AuthCheck" },
-		wrap::Header{
-			{"Connection", "close"},
-			{ "Content-type", "application/json" },
-			{ "Accept", "text/plain" }
-	},
-		wrap::Body{ R"(
-			{
-				"AuthID":"cov1013@com2us.com",
-				"AuthToken":"Test"
-			}
-		)" },
-		wrap::Method{ "POST" });
-	std::cout << r.text << std::endl;
+	wrap::Response res = wrap::HttpsRequest(
+		wrap::Url{ "https://www.postman-echo.com/post" },
+		wrap::Method{ "POST" },
+		wrap::Parameters{{"fruit", "mango"}, { "price","£3" }}
+	);
+
+	std::cout << res.text << std::endl;
+}
+
+void SendJsonRequestMethodGet(const std::string& URL, const std::string& body)
+{
+	wrap::Response res = wrap::HttpsRequest(
+		wrap::Url{ URL },
+		wrap::Header{{"Connection", "close"}, { "Content-type", "application/json" }, { "Accept", "text/plain" }},
+		wrap::Body{body}
+	);
+
+	std::cout << res.text << std::endl;
+}
+
+void SendJsonRequestMethodPost(const std::string& URL, const std::string& body)
+{
+	wrap::Response res = wrap::HttpsRequest(
+		wrap::Url{ URL },
+		wrap::Header{{"Connection", "close"}, { "Content-type", "application/json" }, { "Accept", "text/plain" }},
+		wrap::Method{ "POST" },
+		wrap::Body{body}
+	);
+
+	std::cout << res.text << std::endl;
 }
 
 int main()
 {
-	PostJson();
 
-	SimpleGet();
+	// Postman Echo Test
+	SendRequestMethodGet();
+	SendRequestMethodPost();
 
-	system("PAUSE");
+
+	// FakerHiveServer AuthCheck Test
+	const std::string AUTH_CHECK_SERVER_URL = "http://127.0.0.1:11502/AuthCheck";
+	std::string authCheckReqData = R"(
+		{
+			"AuthID":"cov1013@com2us.com",
+			"AuthToken":"Test"
+		}
+	)";
+	SendJsonRequestMethodGet(AUTH_CHECK_SERVER_URL, authCheckReqData);
+	SendJsonRequestMethodPost(AUTH_CHECK_SERVER_URL, authCheckReqData);
+
+
+	// FakerHiveServer InAppCheck Test
+	const std::string INAPP_CHECK_SERVER_URL = "http://127.0.0.1:11502/InAppCheck";
+	std::string inAppCheckReqData = R"(
+		{
+			"Receipt":"WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d"
+		}
+	)";
+	SendJsonRequestMethodPost(INAPP_CHECK_SERVER_URL, inAppCheckReqData);
+
 	return 0;
 }

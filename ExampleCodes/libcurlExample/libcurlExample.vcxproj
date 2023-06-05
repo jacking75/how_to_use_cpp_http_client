@@ -110,7 +110,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)thirdparty</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libcurld.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>\curl\libcurld.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

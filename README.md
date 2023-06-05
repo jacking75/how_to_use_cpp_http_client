@@ -41,15 +41,13 @@ POST http://localhost:11500/InAppCheckController
 Content-Type: application/json
 
 {
-  "ID":"jacking751",
-  "PW":"123qwe",
-  "NickName": "com2us"
+  "Receipt":"XbRd1nN5ct0IKWNHiULeuxhnLOfhuqHs5vOvRCKVPh0cSQrZk9Dy8q6atVkY3Bg6",
 }
 ```  
 
 ### `AuthCheck` 패킷 작성 시 참고 사항
 
-- `AuthCheck` 요청에 사용할 수 있는 `AuthID` 목록은 다음과 같다.
+- `AuthCheck` 요청에 사용할 수 있는 `AuthID`와 `AuthToken` 목록은 다음과 같다.
 - 코드 경로 : `./FakerHiveServer/Controller/AuthCheckController.cs`
 ```CSharp
 void Init()
@@ -77,7 +75,7 @@ void Init()
 
 ### `InAppCheckController` 패킷 작성 시 참고 사항
 
-- `InAppCheckController` 요청에 사용할 수 있는 것은 `AuthToken` 목록은 다음과 같다.
+- `InAppCheckController` 요청에 사용할 수 있는 것은 `Receipt` 목록은 다음과 같다.
 - 코드 경로 : `./FakerHiveServer/Controller/InAppCheckController.cs`
 ```CSharp
 void Init()

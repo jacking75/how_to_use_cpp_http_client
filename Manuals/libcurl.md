@@ -47,9 +47,18 @@
 
 ## 라이브러리 설명 (TODO)
 
+- `Callback` 방식으로 작동하는 라이브러리다.
+- 등록한 `Callback` 함수에서 응답 데이터를 메모리 또는 파일로 저장할 수 있다.
+- 만약 콜백 함수를 지정하지 않으면, `stdout`으로 응답 데이터가 출력된다.
 - [libcurl 공식 Tutorial 번역](https://docs.google.com/document/d/e/2PACX-1vQeGYH_LQigaj8rh8Ers2MVoopAdCuFacnnH2DHKF1Ie0qxUlcdK5_uwwlnVah5zX9DR39kEONUILie/pub )
 
 ## 예제코드
+
+### Method : GET
+
+```cpp
+#include <stdio.h>
+```
 
 ```cpp
 #include <curl.h>
