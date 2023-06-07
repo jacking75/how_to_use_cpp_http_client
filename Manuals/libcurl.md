@@ -158,12 +158,21 @@ void SendJsonRequestMethodPost(const std::string& URL, const std::string& body)
 ```cpp
 {
 	const std::string AUTH_CHECK_URL = "http://127.0.0.1:11502/AuthCheck";
-	std::string authCheckData = "{\"AuthID\": \"test01\", \"AuthToken\":\"DUWPQCFN5DQF4P\"}";
+	std::string authCheckData = R"(
+		{
+			"AuthID": "test01", 
+			"AuthToken":"DUWPQCFN5DQF4P"
+		}
+	)";
 	SendJsonRequestMethodGet(AUTH_CHECK_URL, authCheckData);
 	SendJsonRequestMethodPost(AUTH_CHECK_URL, authCheckData);
 
 	const std::string INAPP_CHECK_URL = "http://127.0.0.1:11502/InAppCheck";
-	std::string inAppCheckData = "{\"Receipt\": \"WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d\"}";
+	std::string inAppCheckData = R"(
+		{
+			"Receipt": "WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d"
+		}
+	)";
 	SendJsonRequestMethodPost(INAPP_CHECK_URL, inAppCheckData);
 }
 ```
