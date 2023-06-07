@@ -1,12 +1,10 @@
+
+#pragma comment(lib, "ws2_32")
 #include <cstdio>
 #include <cstring>
-
-#ifdef _WIN32
-#pragma comment(lib, "ws2_32")
+#include <iostream>
 #include <WinSock2.h>
 #include <ws2tcpip.h>
-#endif
-
 #include "happyhttp.h"
 
 int count = 0;
@@ -157,16 +155,13 @@ void SendJsonRequestMethodPost(const std::string& host, const std::string& uri, 
 
 int main()
 {
-#ifdef _WIN32
 	WSAData wsaData;
 	int code = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (code != 0)
 	{
-		fprintf(stderr, "shite. %d\n", code);
+		std::cout << "WSAStartup failed with error: " << code << std::endl;
 		return 0;
 	}
-#endif //_WIN32
-
 
 	const std::string SERVER_HOST = "127.0.0.1";
 	const int SERVER_PORT = 11502;
@@ -200,9 +195,7 @@ int main()
 		fprintf(stderr, "Exception:\n%s\n", e.what());
 	}
 
-#ifdef _WIN32
 	WSACleanup();
-#endif // _WIN32
 
 	return 0;
 }

@@ -29,6 +29,15 @@ while (conn.outstanding())	// 모든 응답 데이터를 수신했는가?
 	conn.pump();
 }
 ```
+- 라이브러리 사용전에 `WSAStartup()` 함수를 호출하여 `WinSock` 사용 초기화를 해야한다.
+```cpp
+WSAData wsaData;
+int code = WSAStartup(MAKEWORD(2, 2), &wsaData);
+if (code != 0)
+{
+	return 0;
+}
+```
 
 ## 예제코드
 
