@@ -66,11 +66,23 @@ namespace testset
 		}
 	}
 
-	void Worker(const uint32_t body_size)
+	void Worker()
 	{
 		std::string url = "http://127.0.0.1:11502/AuthCheck";
+		//std::string url = "http://127.0.0.1:11502/InAppCheck";
 
-		char* body = new char[body_size];
+		const char* body = R"(
+			{
+				"AuthID":"test01",
+				"AuthToken":"DUWPQCFN5DQF4P"
+			}
+		)";
+
+		//const char* body = R"(
+		//	{
+		//		"Receipt":"aepIhSInxFk68yvdk66cwfskjti6sBKTqPBHo6vdI5J664EpOVBYN4lwqk89n1YJ"
+		//	}
+		//)";
 
 		while (running == true)
 		{
@@ -80,8 +92,6 @@ namespace testset
 
 			Sleep(1);
 		}
-
-		delete[] body;
 	}
 
 	void Monitor(const uint32_t worker_count, const uint32_t test_time_sec)
@@ -107,7 +117,7 @@ namespace testset
 		running = false;
 	}
 
-	void InitAndTestRun(const uint32_t worker_count, const uint32_t test_time_sec, const uint32_t body_size)
+	void InitAndTestRun(const uint32_t worker_count, const uint32_t test_time_sec)
 	{
 		running = true;
 
@@ -117,7 +127,7 @@ namespace testset
 
 		for (uint32_t i = 0; i < worker_count; i++)
 		{
-			workers.push_back(std::thread(Worker, body_size));
+			workers.push_back(std::thread(Worker));
 		}
 
 		std::thread timer(Timer, test_time_sec);
@@ -140,9 +150,8 @@ int main(int argc, char* argv[])
 	{
 		auto worker_count = std::stoi(argv[1]);
 		auto test_time_sec = std::stoi(argv[2]);
-		auto body_size = std::stoi(argv[3]);
 
-		testset::InitAndTestRun(worker_count, test_time_sec, body_size);
+		testset::InitAndTestRun(worker_count, test_time_sec);
 
 		std::cout << "TotalReqRes: " << testset::complete_count << std::endl;
 	}

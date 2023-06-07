@@ -25,12 +25,16 @@ namespace testset
 
 	void OnComplete(const happyhttp::Response* response, void* userData)
 	{
+		tps++;
 	}
 
 	void SendRequest(const char* host, const char* url, const int port, const char body[], const int32_t body_size)
 	{
-		const char* header[] = {
+		const char* header[] =
+		{
 			"Connection", "close",
+			"Content-type", "application/json",
+			"Accept", "text/plain",
 			0
 		};
 
@@ -54,23 +58,32 @@ namespace testset
 		conn.close();
 	}
 
-	void Worker(const uint32_t body_size)
+	void Worker()
 	{
 		const char* host = "127.0.0.1";
 		const char* uri = "/AuthCheck";
+
 		const int32_t port = 11502;
-		char* p_body = new char[body_size];
+
+		const char* body = R"(
+			{
+				"AuthID":"test01",
+				"AuthToken":"DUWPQCFN5DQF4P"
+			}
+		)";
+
+		//const char* body = R"(
+		//	{
+		//		"Receipt":"aepIhSInxFk68yvdk66cwfskjti6sBKTqPBHo6vdI5J664EpOVBYN4lwqk89n1YJ"
+		//	}
+		//)";
 
 		while (running == true)
 		{
-			SendRequest(host, uri, port, p_body, body_size);
-
-			InterlockedIncrement(&tps);
+			SendRequest(host, uri, port, body, strlen(body));
 
 			Sleep(1);
 		}
-
-		delete[] p_body;
 	}
 
 	void Monitor(const uint32_t worker_count, const uint32_t test_time_sec)
@@ -96,7 +109,7 @@ namespace testset
 		running = false;
 	}
 
-	void InitAndTestRun(const uint32_t worker_count, const uint32_t test_time_sec, const uint32_t body_size)
+	void InitAndTestRun(const uint32_t worker_count, const uint32_t test_time_sec)
 	{
 		WSAData wsaData;
 		int code = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -114,7 +127,7 @@ namespace testset
 
 		for (uint32_t i = 0; i < worker_count; i++)
 		{
-			workers.push_back(std::thread(Worker, body_size));
+			workers.push_back(std::thread(Worker));
 		}
 
 		std::thread timer(Timer, test_time_sec);
@@ -139,9 +152,8 @@ int main(int argc, char* argv[])
 	{
 		auto worker_count = std::stoi(argv[1]);
 		auto test_time_sec = std::stoi(argv[2]);
-		auto body_size = std::stoi(argv[3]);
 
-		testset::InitAndTestRun(worker_count, test_time_sec, body_size);
+		testset::InitAndTestRun(worker_count, test_time_sec);
 
 		std::cout << "TotalReqRes: " << testset::complete_count << std::endl;
 	}

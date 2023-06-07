@@ -1,78 +1,51 @@
-# 서버 머신 사양
+# 테스트 서버 사양
+
 
 # 테스트 설명
 
 ## 테스트 항목
-1. 테스트 시간 동안 총 몇 번의 Req/Res를 진행했는가.
-2. 라이브러리 자체의 메모리 누수가 있는가?
+1. 테스트 시간 동안 총 몇 번의 요청/응답을 진행했는가.
+2. 라이브러리에 메모리 누수가 있는가?
+3. 라이브러리가 멀티 스레드에 안전한가?
 
-## 테스트 방법
-1. 설정한 스레드 개수 만큼 스레드 생성
-2. 설정한 테스트 시간 만큼 각 스레드는 일정 시간 마다 설정한 크기의 HTTP 패킷을 송신한다.
-3. 각 스레드는 서버로부터 응답을 받았을 경우 성공 횟수를 증가시킨다.
-3. 테스트 시간이 종료됐으면 프로그램 종료 전에 [CRT 라이브러리](https://learn.microsoft.com/ko-kr/cpp/c-runtime-library/find-memory-leaks-using-the-crt-library?view=msvc-170)를 사용해서 메모리 누수 체크
+## 테스트 시나리오
+0. 설정한 개수 만큼 스레드 생성 (*멀티 스레드 테스트 전용. 실제 성능 테스트시에는 스레드 1개로 진행*)
+1. 설정한 시간만큼 HTTP Request 송신.
+2. 서버로부터 Response를 수신 받은 경우 성공 횟수 증가.
+3. 테스트 종료 후 [CRT 라이브러리](https://learn.microsoft.com/ko-kr/cpp/c-runtime-library/find-memory-leaks-using-the-crt-library?view=msvc-170)를 통해 메모리 누수 확인.
 
-# 테스트 결과
+## 테스트 결과
 
-## HappyHTTP
+### 1. 메모리 누수 테스트
 
-### 테스트 설정값
-|||
-| :-----           | :---- |
-| Test Time (Sec)  | 60 |
-| Worker Count     | 1 |
-| Solution Config  | Debug |
-
-### 결과
-| Packet Size (bytes) | Total Count |
-| :-----              | :----: |
-| 1 bytes             | 3974 |
-| 1,000 bytes         | 3968 |
-| 1,000,000 bytes     | 3983 |
-
-- **Thread Safed** 하다.
-- **Memory Leak**이 없다.
+Library     | Memory Leak |
+:-------    | :---------: |
+`HappyHTTP` | No          | 
+`libcurl`   | No          |
+`WNetWap`   | Yes         |
 
 <br>
 
-## libcurl
+### 2. 멀티 스레드 안전성 테스트
 
-### 테스트 설정값
-|||
-| :-----           | ----: |
-| Test Time (Sec)  | 60 |
-| Worker Count     | 1 |
-| Solution Config  | Debug |
-
-### 결과
-| Packet Size (bytes) | Total Count |
-| :-----              | :----: |
-| 1 bytes             | 2775 |
-| 1,000 bytes         | 2744 |
-| 1,000,000 bytes     | 3634 |
-
-- **Thread Safed** 하다.
-- **Memory Leak**이 없다.
+Library     | Thread Safe |
+:-------    | :---------: |
+`HappyHTTP` | Yes         |
+`libcurl`   | Yes         | 
+`WNetWap`   | No          |
 
 <br>
 
-## WNetWrap
+### 3. 성능 테스트
 
-### 테스트 설정값
-|||
-| :-----           | ----: |
-| Test Time (Sec)  | 60 |
-| Worker Count     | 1 |
-| Solution Config  | Debug |
+API         | Library    | Test Time(sec)  | Total Count  |
+:-------    |:-------    | :-------------: | :----------: |
+`AuthCheck` |`HappyHTTP` | 60              |              |
+`AuthCheck` |`libcurl`   | 60              |              |
+`AuthCheck` |`WNetWap`   | 60              |              |
 
-### 결과
-| Packet Size (bytes) | Total Count |
-| :-----              | :----: |
-| 1 bytes             | 3967 |
-| 1,000 bytes         | 3967 |
-| 1,000,000 bytes     | 3989 |
-
-- 라이브러리 내부에서 전역 변수를 사용하고 있어서 **Thread Safed 하지 않다.** (*Lock을 걸지 않으면 에러 발생*)
-- 라이브러리 자체적으로 **Memory Leak** 존재.
-    - 내부에서 `std::map`을 사용하고 있는데, 노드를 삭제하지 않고 있다.
-    - 공식 문서를 살펴봐도 따로 `Release`하라는 설명이나, 관련 함수가 존재하지 않는다.
+API          | Library    | Test Time(sec)  | Total Count  |
+:-------     |:-------    | :-------------: | :----------: |
+`InAppCheck` |`HappyHTTP` | 60              |              |
+`InAppCheck` |`libcurl`   | 60              |              |
+`InAppCheck` |`WNetWap`   | 60              |              |

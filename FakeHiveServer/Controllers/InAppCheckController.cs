@@ -1,21 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using ZLogger;
-using static APIServer.Controllers.InAppCheck;
+﻿using System.Collections.Generic;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace APIServer.Controllers;
 
 [ApiController]
 [Route("[controller]")]
 public class InAppCheck : Controller
-{ 
+{
     List<string> _receiptList = new();
 
     public InAppCheck()
-    { 
+    {
         Init();
     }
 
@@ -24,7 +20,7 @@ public class InAppCheck : Controller
     {
         PkReceiptCheckRes response = new();
 
-        if(ReceiptCheck(request.Receipt) == false)
+        if (ReceiptCheck(request.Receipt) == false)
         {
             response.Result = ErrorCode.ReceiptCheckFail;
         }
