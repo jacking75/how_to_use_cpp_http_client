@@ -25,8 +25,6 @@ Library     | Memory Leak |
 `libcurl`   | No          |
 `WNetWap`   | Yes         |
 
-<br>
-
 ### 2. 멀티 스레드 안전성 테스트
 
 Library     | Thread Safe |
@@ -34,8 +32,6 @@ Library     | Thread Safe |
 `HappyHTTP` | Yes         |
 `libcurl`   | Yes         | 
 `WNetWap`   | No          |
-
-<br>
 
 ### 3. 성능 테스트
 
