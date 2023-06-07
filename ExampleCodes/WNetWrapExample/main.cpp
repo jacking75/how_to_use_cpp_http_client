@@ -5,7 +5,7 @@ void SendRequestMethodGet()
 {
 	wrap::Response res = wrap::HttpsRequest(
 		wrap::Url{ "https://www.postman-echo.com/get" },
-		wrap::Parameters{{"fruit", "mango"}, { "price","£3" }}
+		wrap::Parameters{{"fruit", "mango"}, { "price","3" }}
 	);
 
 	std::cout << res.text << std::endl;
@@ -16,7 +16,7 @@ void SendRequestMethodPost()
 	wrap::Response res = wrap::HttpsRequest(
 		wrap::Url{ "https://www.postman-echo.com/post" },
 		wrap::Method{ "POST" },
-		wrap::Parameters{{"fruit", "mango"}, { "price","£3" }}
+		wrap::Parameters{{"fruit", "mango"}, { "price","3" }}
 	);
 
 	std::cout << res.text << std::endl;
@@ -57,8 +57,8 @@ int main()
 	const std::string AUTH_CHECK_SERVER_URL = "http://127.0.0.1:11502/AuthCheck";
 	std::string authCheckReqData = R"(
 		{
-			"AuthID":"cov1013@com2us.com",
-			"AuthToken":"Test"
+			"AuthID":"test01",
+			"AuthToken":"DUWPQCFN5DQF4P"
 		}
 	)";
 	SendJsonRequestMethodGet(AUTH_CHECK_SERVER_URL, authCheckReqData);

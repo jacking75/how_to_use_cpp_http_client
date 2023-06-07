@@ -54,6 +54,18 @@
 
 ## 예제코드
 
+### Callback Function
+```cpp
+size_t OnResponseData(char* ptr, size_t size, size_t nmemb, std::string* stream)
+{
+	int realsize = size * nmemb;
+
+	std::cout << ptr << std::endl;
+
+	return realsize;
+}
+```
+
 ### GET Request (JSON)
 ```cpp
 void SendJsonRequestMethodGet(const std::string& URL, const std::string& body)
