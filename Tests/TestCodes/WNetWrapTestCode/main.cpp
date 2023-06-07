@@ -10,7 +10,6 @@ namespace testset
 {
 	uint32_t tps = 0;
 	uint64_t complete_count = 0;
-	SRWLOCK srw_obj;
 	bool running;
 
 	void SendRequest(const std::string& URL, const std::string& body)
@@ -31,11 +30,7 @@ namespace testset
 
 		while (running == true)
 		{
-			AcquireSRWLockExclusive(&srw_obj);
-
 			SendRequest(url, body);
-
-			ReleaseSRWLockExclusive(&srw_obj);
 
 			InterlockedIncrement(&tps);
 
@@ -70,8 +65,6 @@ namespace testset
 
 	void InitAndTestRun(const uint32_t worker_count, const uint32_t test_time_sec, const uint32_t body_size)
 	{
-		InitializeSRWLock(&srw_obj);
-
 		running = true;
 
 		std::thread monitor(Monitor, worker_count, test_time_sec);
