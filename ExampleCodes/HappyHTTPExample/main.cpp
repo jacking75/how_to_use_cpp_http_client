@@ -1,108 +1,134 @@
-
 #pragma comment(lib, "ws2_32")
-#include <cstdio>
-#include <cstring>
 #include <iostream>
 #include <WinSock2.h>
 #include <ws2tcpip.h>
 #include "happyhttp.h"
 
-int count = 0;
-
-void OnBegin(const happyhttp::Response* response, void* userData)
+void ReceiveResponseData(happyhttp::Connection& conn)
 {
-	printf("BEGIN (%d %s)\n", response->getstatus(), response->getreason());
-
-	count = 0;
-}
-
-void OnData(const happyhttp::Response* response, void* userData, const unsigned char* responseData, int responseDataLength)
-{
-	fwrite(responseData, 1, responseDataLength, stdout);
-
-	count += responseDataLength;
-}
-
-void OnComplete(const happyhttp::Response* response, void* userData)
-{
-	printf("\nCOMPLETE (%d bytes)\n", count);
-}
-
-void SendRequestMethodGet()
-{
-	happyhttp::Connection conn("www.postman-echo.com", 80);
-	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
-
-	const char* body = "fruit=mango&price=3";
-
-	conn.request(
-		"GET",
-		"/get",
-		NULL,
-		(const unsigned char*)body,
-		(int)strlen(body)
-	);
-
 	while (conn.outstanding())
 	{
 		conn.pump();
 	}
 }
 
-void SendRequestMethodPost()
+void OnBegin(const happyhttp::Response* response, void* userData)
 {
-	const char* headers[] =
+	printf("BEGIN (%d %s)\n", response->getstatus(), response->getreason());
+}
+
+void OnData(const happyhttp::Response* response, void* userData, const unsigned char* responseData, int responseDataLength)
+{
+	fwrite(responseData, 1, responseDataLength, stdout);
+}
+
+void OnComplete(const happyhttp::Response* response, void* userData)
+{
+	std::cout << std::endl;
+	std::cout << "Done response data receive" << std::endl;
+}
+
+void ExampleMethodGet()
+{
+	const char* host = "www.postman-echo.com";
+	const int32_t port = 80;
+	const char* body_data = "fruit=mango&price=3";
+	const int32_t body_data_len = (int32_t)strlen(body_data);
+
+	// happyhttp 인스턴스 생성
+	happyhttp::Connection conn(host, port);
+
+	// 콜백 함수 등록
+	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
+
+	// 요청
+	conn.request(
+		"GET",
+		"/get",
+		NULL,
+		(const unsigned char*)body_data,
+		body_data_len
+	);
+
+	ReceiveResponseData(conn);
+}
+
+void ExampleMethodPost()
+{
+	const char* host = "www.postman-echo.com";
+	const int32_t port = 80;
+	
+	const char* header[] =
 	{
 		"Connection", "close",
 		"Content-type", "application/x-www-form-urlencoded",
 		"Accept", "text/plain",
 		0
 	};
+	const char* body_data = "fruit=mango&price=3";
+	const int32_t body_data_len = (int)strlen(body_data);
 
-	const char* body = "fruit=mango&price=3";
+	// happyhttp 인스턴스 생성
+	happyhttp::Connection conn(host, port);
 
-	happyhttp::Connection conn("www.postman-echo.com", 80);
+	// 콜백 함수 등록
 	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
 
+	// 요청
 	conn.request(
 		"POST",
 		"/post",
-		headers,
-		(const unsigned char*)body,
-		(int)strlen(body)
+		header,
+		(const unsigned char*)body_data,
+		body_data_len
 	);
 
-	while (conn.outstanding())
-	{
-		conn.pump();
-	}
+	ReceiveResponseData(conn);
 }
 
-void SendPostRequest_LowLevelInterface()
+void ExampleMethodPostLowLevelInterface()
 {
-	const char* body = "fruit=mango&price=3";
-	auto bodyLen = (int)strlen(body);
+	const char* host = "www.postman-echo.com";
+	const int32_t port = 80;
 
-	happyhttp::Connection conn("www.postman-echo.com", 80);
+	const char* body_data = "fruit=mango&price=3";
+	const int32_t body_data_len = (int)strlen(body_data);
+
+	// happyhttp 인스턴스 생성
+	happyhttp::Connection conn(host, port);
+
+	// 콜백 함수 등록
 	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
 
+	// 헤더 세팅
 	conn.putheader("Connection", "close");
-	conn.putheader("Content-Length", bodyLen);
 	conn.putheader("Content-type", "application/x-www-form-urlencoded");
 	conn.putheader("Accept", "text/plain");
 	conn.endheaders();
 
+	// 메소드 세팅
 	conn.putrequest("POST", "/post");
-	conn.send((const unsigned char*)body, bodyLen);
 
-	while (conn.outstanding())
-	{
-		conn.pump();
-	}
+	// 송신
+	conn.send((const unsigned char*)body_data, body_data_len);
+
+	ReceiveResponseData(conn);
 }
 
-void SendJsonRequestMethodGet(const std::string& host, const std::string& uri, const int port, const std::string body)
+bool DoJsonRequest (
+	const char* host, 
+	const int32_t port, 
+	const char* url, 
+	const char* method, 
+	const char* body_data)
 {
+	const int32_t body_data_len = strlen(body_data);
+
+	if (body_data_len <= 0)
+	{
+		return false;
+	}
+
 	const char* header[] = {
 		"Connection", "close",
 		"Content-type", "application/json",
@@ -110,89 +136,69 @@ void SendJsonRequestMethodGet(const std::string& host, const std::string& uri, c
 		0
 	};
 
-	happyhttp::Connection conn(host.c_str(), port);
+	happyhttp::Connection conn(host, port);
 	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
 
 	conn.request(
-		"GET",
-		uri.c_str(),
+		method,
+		url,
 		header,
-		(const unsigned char*)body.c_str(),
-		strlen(body.c_str())
+		(const unsigned char*)body_data,
+		body_data_len
 	);
 
-	while (conn.outstanding() == true)
-	{
-		conn.pump();
-	}
+	ReceiveResponseData(conn);
+
+	return true;
 }
 
-void SendJsonRequestMethodPost(const std::string& host, const std::string& uri, const int port, const std::string body)
+bool NetInit()
 {
-	const char* header[] = {
-		"Connection", "close",
-		"Content-type", "application/json",
-		"Accept", "text/plain",
-		0
-	};
-
-	happyhttp::Connection conn(host.c_str(), port);
-	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
-
-	conn.request(
-		"POST",
-		uri.c_str(),
-		header,
-		(const unsigned char*)body.c_str(),
-		strlen(body.c_str())
-	);
-
-	while (conn.outstanding() == true)
+	WSAData wsaData;
+	int32_t errcode = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (errcode != NO_ERROR)
 	{
-		conn.pump();
+		std::cout << "WSAStartup failed with error: " << errcode << std::endl;
+		return false;
 	}
+	return true;
 }
 
 int main()
 {
-	WSAData wsaData;
-	int code = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (code != 0)
+	if (NetInit() == false)
 	{
-		std::cout << "WSAStartup failed with error: " << code << std::endl;
 		return 0;
 	}
 
-	const std::string SERVER_HOST = "127.0.0.1";
-	const int SERVER_PORT = 11502;
+	const char* host = "127.0.0.1";
+	const int32_t port = 11502;
 
-	try
-	{
-		// Postman Echo Test
-		SendRequestMethodGet();
-		SendRequestMethodPost();
-
-		// FakerHiveServer AuthCheck Test
-		std::string authCheckReqData = R"(
+	const auto auth_check_body_data = 
+		R"(
 			{
 				"AuthID":"test01",
 				"AuthToken":"DUWPQCFN5DQF4P"
 			}
 		)";
-		SendJsonRequestMethodGet(SERVER_HOST, "/AuthCheck", SERVER_PORT, authCheckReqData);
-		SendJsonRequestMethodPost(SERVER_HOST, "/AuthCheck", SERVER_PORT, authCheckReqData);
 
-		// FakerHiveServer InAppCheck Test
-		std::string inAppCheckReqData = R"(
+
+	const auto inapp_check_body_data = 
+		R"(
 			{
 				"Receipt":"WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d"
 			}
 		)";
-		SendJsonRequestMethodPost(SERVER_HOST, "/InAppCheck", SERVER_PORT, inAppCheckReqData);
+
+	try
+	{
+		DoJsonRequest(host, port, "/AuthCheck", "GET", auth_check_body_data);
+		DoJsonRequest(host, port, "/AuthCheck", "POST", auth_check_body_data);
+		DoJsonRequest(host, port, "/InAppCheck", "POST", inapp_check_body_data);
 	}
 	catch (happyhttp::Wobbly& e)
 	{
-		fprintf(stderr, "Exception:\n%s\n", e.what());
+		std::cout << "happyhttp Exception: " << e.what() << std::endl;
 	}
 
 	WSACleanup();

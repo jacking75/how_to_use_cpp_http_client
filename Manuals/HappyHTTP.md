@@ -19,277 +19,259 @@
 ## 라이브러리 설명
 
 - `Windows`와 `Linux`를 지원한다. (*해당 문서에서는 `Windows` 환경에서의 사용법만 다룬다.*)
-- 응답 데이터를 콜백 함수(`OnBegin`, `OnData`, `OnComplete`)를 통해 핸들링 할 수 있다.
-- 별도의 라이브러리 설치 없이, 해당 라이브러리의 소스 코드만으로 사용 가능하다.
-- 요청 후 응답을 받기 위해 별도의 `while` 문을 사용하여 모든 응답 데이터를 수신받을 때 까지 `Folling` 해야한다.
+- 응답 데이터를 콜백 함수(`OnBegin`, `OnData`, `OnComplete`)를 통해 핸들링한다.
+- 별도의 라이브러리 설치 없이 **해당 라이브러리의 소스 코드만으로 사용 가능**하다.
+
+## 라이브러리 사용하기
+
+가장 먼저 `WSAStartup()` 함수를 호출하여 `WinSock`을 초기화를 해야한다.
 ```cpp
-while (conn.outstanding())	// 모든 응답 데이터를 수신했는가?
+bool NetInit()
 {
-	// 응답 데이터를 계속 수신한다.
-	conn.pump();
+	WSAData wsaData;
+	int32_t errcode = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (errcode != NO_ERROR)
+	{
+		std::cout << "WSAStartup failed with error: " << errcode << std::endl;
+		return false;
+	}
+	return true;
 }
 ```
-- 라이브러리 사용전에 `WSAStartup()` 함수를 호출하여 `WinSock` 사용 초기화를 해야한다.
-```cpp
-WSAData wsaData;
-int code = WSAStartup(MAKEWORD(2, 2), &wsaData);
-if (code != 0)
-{
-	return 0;
-}
-```
 
-## 예제코드
+이후 응답 데이터에 대한 각각의 콜백 함수를 선언 및 정의한다.
 
-### OnBegin Example
-- 응답 수신 시 한 번 호출
-- 응답 상태 확인 가능.
+### `OnBegin`
+- 응답 데이터 수신 시 **한 번 호출**된다.
+- 매개 변수로 받은 `happyhttp::Response*`를 통해 응답 상태를 확인할 수 있다.
 
+#### 예제 코드
 ```cpp
 void OnBegin(const happyhttp::Response* response, void* userData)
 {
+	// 응답 상태를 출력한다.
 	printf("BEGIN (%d %s)\n", response->getstatus(), response->getreason());
 }
 ```
 
-### OnData Example
-- 응답 데이터 수신 시 여러 번 호출 (*모든 응답 데이터를 수신받을 때 까지 계속 호출된다.*)
+### `OnData`
+- 응답 데이터 수신을 위한 **Folling 중 (*아래 설명*) 여러 번 호출**된다.
+- 매개 변수로 받은 `happyhttp::Response*`를 통해 응답 상태를 확인할 수 있다.
+- 매개 변수로 받은 `responseData`와 `responseDataLength`로 수신 받은 데이터에 접근 가능하다.
+
+#### 예제 코드
 ```cpp
 void OnData(const happyhttp::Response* response, void* userData, const unsigned char* responseData, int responseDataLength)
 {
+	// 표준 출력 장치에 현재 수신 받은 응답 데이터 출력
 	fwrite(responseData, 1, responseDataLength, stdout);
 }
 ```
 
-### OnComplete Example
-- 응답 데이터 수신 완료 시 한 번 호출
+### `OnComplete`
+- 모든 응답 데이터를 수신했을 경우 **한 번 호출**된다.
+- Folling이 종료된다.
+
+#### 예제 코드
 ```cpp
 void OnComplete(const happyhttp::Response* response, void* userData)
 {
-	printf("\nCOMPLETE\n";
+	std::cout << std::endl;
+	std::cout << "Done response data receive" << std::endl;
 }
 ```
 
-### Get Request
+### Folling 설명
+- 요청 패킷 송신 후 응답 데이터를 수신 받기 위해 다음과 같이 `outstanding()` 함수와 `pump()` 함수를 통해 Folling한다.
 ```cpp
-void SendRequestMethodGet()
+void ReceiveResponseData(happyhttp::Connection* p_conn)
 {
-	// 연결
-	happyhttp::Connection conn("www.postman-echo.com", 80);
-
-	// 콜백 함수 등록
-	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
-
-	const char* body = "fruit=mango&price=3";
-
-	// 요청 패킷 송신
-	conn.request(
-		"GET",
-		"/get",
-		NULL,
-		(const unsigned char*)body,
-		(int)strlen(body)
-	);
-
-	// 응답 데이터 수신 처리 완료 대기
-	while (conn.outstanding())
+	while (p_conn->outstanding())	// 응답 데이터가 남아있는가?
 	{
-		conn.pump();
+		// 응답 데이터를 계속 수신한다.
+		p_conn->pump();
 	}
 }
 ```
 
-### POST Request
+### 예제 1. METHOD : GET
 ```cpp
-void SendRequestMethodPost()
+void ExampleMethodGet()
 {
-	// 헤더 설정
-	const char* headers[] =
+	const char* host = "www.postman-echo.com";
+	const int32_t port = 80;
+	const char* body_data = "fruit=mango&price=3";
+	const int32_t body_data_len = (int32_t)strlen(body_data);
+
+	// happyhttp 인스턴스 생성
+	happyhttp::Connection conn(host, port);
+
+	// 콜백 함수 등록
+	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
+
+	// 요청
+	conn.request(
+		"GET",
+		"/get",
+		NULL,
+		(const unsigned char*)body_data,
+		body_data_len
+	);
+
+	ReceiveResponseData(conn);
+}
+```
+
+### 예제 2. METHOD : POST
+```cpp
+void ExampleMethodPost()
+{
+	const char* url = "www.postman-echo.com";
+	const int32_t port = 80;
+	
+	const char* header[] =
 	{
 		"Connection", "close",
 		"Content-type", "application/x-www-form-urlencoded",
 		"Accept", "text/plain",
 		0
 	};
+	const char* body_data = "fruit=mango&price=3";
+	const int32_t body_data_len = (int)strlen(body_data);
 
-	const char* body = "fruit=mango&price=3";
-
-	// 연결
-	happyhttp::Connection conn("www.postman-echo.com", 80);
+	// happyhttp 인스턴스 생성
+	happyhttp::Connection conn(url, port);
 
 	// 콜백 함수 등록
 	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
 
-	// 요청 패킷 송신
+	// 요청
 	conn.request(
 		"POST",
 		"/post",
-		headers,
-		(const unsigned char*)body,
-		(int)strlen(body)
+		header,
+		(const unsigned char*)body_data,
+		body_data_len
 	);
 
-	// 응답 데이터 수신 처리 완료 대기
-	while (conn.outstanding())
-	{
-		conn.pump();
-	}
+	ReceiveResponseData(conn);
 }
 ```
 
-### POST Request (Low-Level Interface)
+### 예제 3. METHOD : POST (Low-Level Interface)
 ```cpp
-void SendPostRequest_LowLevelInterface()
+void ExampleMethodPostLowLevelInterface()
 {
-	const char* body = "fruit=mango&price=3";
-	auto bodyLen = (int)strlen(body);
+	const char* url = "www.postman-echo.com";
+	const int32_t port = 80;
 
-	// 연결
-	happyhttp::Connection conn("www.postman-echo.com", 80);
+	const char* body_data = "fruit=mango&price=3";
+	const int32_t body_data_len = (int)strlen(body_data);
 
-	// 헤더 설정
+	// happyhttp 인스턴스 생성
+	happyhttp::Connection conn(url, port);
+
+	// 콜백 함수 등록
+	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
+
+	// 헤더 세팅
 	conn.putheader("Connection", "close");
-	conn.putheader("Content-Length", bodyLen);
 	conn.putheader("Content-type", "application/x-www-form-urlencoded");
 	conn.putheader("Accept", "text/plain");
 	conn.endheaders();
 
-	// 콜백 함수 등록
-	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
-
-	// 요청 방식 설정
+	// 메소드 세팅
 	conn.putrequest("POST", "/post");
 
 	// 송신
-	conn.send((const unsigned char*)body, bodyLen);
+	conn.send((const unsigned char*)body_data, body_data_len);
 
-	// 응답 데이터 수신 처리 완료 대기
-	while (conn.outstanding())
-	{
-		conn.pump();
-	}
+	ReceiveResponseData(conn);
 }
 ```
 
-### GET Request (JSON)
+### 예제 4. JSON Request
+- BodyData를 `JSON`으로 송신하고 싶은 경우 다음과 같이 사용할 수 있다.
 ```cpp
-void SendJsonRequestMethodGet(const std::string& host, const std::string& uri, const int port, const std::string body)
+bool DoJsonRequest (
+	const char* host, 
+	const int32_t port, 
+	const char* url, 
+	const char* method, 
+	const char* body_data)
 {
-	// 헤더 설정
+	const int32_t body_data_len = strlen(body_data);
+
+	if (body_data_len <= 0)
+	{
+		return false;
+	}
+
 	const char* header[] = {
 		"Connection", "close",
-		"Content-type", "application/json",
+		"Content-type", "application/json",	// JSON으로 설정한다.
 		"Accept", "text/plain",
 		0
 	};
 
-	// 연결
-	happyhttp::Connection conn(host.c_str(), port);
-
-	// 콜백 함수 등록
+	happyhttp::Connection conn(host, port);
 	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
 
-	// 요청 패킷 송신
 	conn.request(
-		"GET",
-		uri.c_str(),
+		method,
+		url,
 		header,
-		(const unsigned char*)body.c_str(),
-		strlen(body.c_str())
+		(const unsigned char*)body_data,
+		body_data_len
 	);
 
-	// 응답 데이터 수신 처리 완료 대기
-	while (conn.outstanding() == true)
-	{
-		conn.pump();
-	}
+	ReceiveResponseData(conn);
+
+	return true;
 }
 ```
 
-### POST Request (JSON)
+#### 실제 사용 예시
 ```cpp
-void SendJsonRequestMethodPost(const std::string& host, const std::string& uri, const int port, const std::string body)
+int main()
 {
-	// 헤더 세팅
-	const char* header[] = {
-		"Connection", "close",
-		"Content-type", "application/json",
-		"Accept", "text/plain",
-		0
-	};
-
-	// 연결
-	happyhttp::Connection conn(host.c_str(), port);
-
-	// 콜백 함수 등록
-	conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
-
-	// 요청 패킷 송신
-	conn.request(
-		"POST",
-		uri.c_str(),
-		header,
-		(const unsigned char*)body.c_str(),
-		strlen(body.c_str())
-	);
-
-
-	// 응답 데이터 수신 처리 완료 대기
-	while (conn.outstanding() == true)
+	if (NetInit() == false)
 	{
-		conn.pump();
-	}
-}
-```
-
-### 사용하는 부분
-```cpp
-{
-#ifdef _WIN32
-	WSAData wsaData;
-	int code = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (code != 0)
-	{
-		fprintf(stderr, "shite. %d\n", code);
 		return 0;
 	}
-#endif //_WIN32
 
+	const char* host = "127.0.0.1";
+	const int32_t port = 11502;
 
-	const std::string SERVER_HOST = "127.0.0.1";
-	const int SERVER_PORT = 11502;
-
-	try
-	{
-		// Postman Echo Test
-		SendRequestMethodGet();
-		SendRequestMethodPost();
-
-		// FakerHiveServer AuthCheck Test
-		std::string authCheckReqData = R"(
+	const auto auth_check_body_data = 
+		R"(
 			{
 				"AuthID":"test01",
 				"AuthToken":"DUWPQCFN5DQF4P"
 			}
 		)";
-		SendJsonRequestMethodGet(SERVER_HOST, "/AuthCheck", SERVER_PORT, authCheckReqData);
-		SendJsonRequestMethodPost(SERVER_HOST, "/AuthCheck", SERVER_PORT, authCheckReqData);
 
-		// FakerHiveServer InAppCheck Test
-		std::string inAppCheckReqData = R"(
+
+	const auto inapp_check_body_data = 
+		R"(
 			{
 				"Receipt":"WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d"
 			}
 		)";
-		SendJsonRequestMethodPost(SERVER_HOST, "/InAppCheck", SERVER_PORT, inAppCheckReqData);
+
+	try
+	{
+		DoJsonRequest(host, port, "/AuthCheck", "GET", auth_check_body_data);
+		DoJsonRequest(host, port, "/AuthCheck", "POST", auth_check_body_data);
+		DoJsonRequest(host, port, "/InAppCheck", "POST", inapp_check_body_data);
 	}
 	catch (happyhttp::Wobbly& e)
 	{
-		fprintf(stderr, "Exception:\n%s\n", e.what());
+		std::cout << "happyhttp Exception: " << e.what() << std::endl;
 	}
 
-#ifdef _WIN32
 	WSACleanup();
-#endif // _WIN32
+
+	return 0;
 }
 ```
