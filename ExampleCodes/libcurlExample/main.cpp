@@ -120,7 +120,10 @@ const bool DoJsonRequest(
 	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, isSSL);
 
 	// METHOD
-	curl_easy_setopt(curl, CURLOPT_POST, 1L);
+	if (isPostMethod == true)
+	{
+		curl_easy_setopt(curl, CURLOPT_POST, 1L);
+	}
 
 	// BODY DATA
 	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body_data);
