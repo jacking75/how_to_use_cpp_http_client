@@ -284,14 +284,6 @@ namespace happyhttp
 		}
 		//	printf("Connecting to %s on port %d.\n",inet_ntoa(*addr), port);
 
-
-
-		::linger linger;
-		linger.l_onoff = 1;
-		linger.l_linger = 0;
-
-		setsockopt(m_Sock, SOL_SOCKET, SO_LINGER, (const char*)&linger, sizeof(linger));
-
 		if (::connect(m_Sock, (sockaddr const*)&address, sizeof(address)) < 0) {
 			BailOnSocketError("connect()");
 		}
@@ -448,7 +440,7 @@ namespace happyhttp
 
 		if (m_Sock < 0) {
 			connect();
-	}
+		}
 
 		while (numbytes > 0)
 		{
@@ -463,7 +455,7 @@ namespace happyhttp
 			numbytes -= n;
 			buf += n;
 		}
-}
+	}
 
 
 	void Connection::pump()
@@ -1007,6 +999,6 @@ namespace happyhttp
 
 
 
-	}	// end namespace happyhttp
+}	// end namespace happyhttp
 
 
