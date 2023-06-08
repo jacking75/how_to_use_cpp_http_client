@@ -29,104 +29,116 @@
 
 ![install](../Images/WNetWrap/install_05.png)
 
-<br>
-
 ## 라이브러리 설명
+- 사용하기 간편하다. (*라이브러리 기능이 직관적이다.*)
+- `Win32API`의 `wininet.h`의 기능을 사용하여 개발된 라이브러리다.
+- 별도의 라이브러리 설치 없이 해당 라이브러리의 **소스 코드만으로 사용 가능**하다.
 
-- `Win32API`의 `wininet.h`를 사용한 라이브러리다.
-- 별도의 라이브러리 설치 없이, 해당 라이브러리의 소스 코드만으로 사용 가능하다.
+### 주의사항
+- 라이브러리 내부적으로 **메모리 누수**가 존재한다.
+- 라이브러리 내부에서 전역 변수를 사용하고 있으므로, **멀티 스레드**로 사용 시 에러가 발생한다.
 
-### 라이브러리 사용 시 참고사항
+### 참고사항
 
-- Timeout 기능을 사용하는 경우 라이브러리 내부에서 별도의 스레드를 생성한다.
+- 요청 시 `Timeout` 기능을 사용하는 경우 라이브러리 내부에서 **별도의 스레드를 생성**한다.
 
-<br>
+## 라이브러리 사용하기
 
-## 예제코드
-
-### Get Request
+### 예제 1. METHOD : GET
 ```cpp
-void SendRequestMethodGet()
+void ExampleMethodGet()
 {
 	wrap::Response res = wrap::HttpsRequest(
 		wrap::Url{ "https://www.postman-echo.com/get" },
-		wrap::Parameters{{"fruit", "mango"}, { "price","30" }}
+		wrap::Parameters{{"fruit", "mango"}, { "price","3" }}
 	);
 
 	std::cout << res.text << std::endl;
 }
 ```
 
-### POST Request
+### 예제 2. METHOD : POST
 ```cpp
-void SendRequestMethodPost()
+void ExampleMethodPost()
 {
 	wrap::Response res = wrap::HttpsRequest(
 		wrap::Url{ "https://www.postman-echo.com/post" },
 		wrap::Method{ "POST" },
-		wrap::Parameters{{"fruit", "mango"}, { "price","30" }}
+		wrap::Parameters{
+			{"fruit", "mango"}, 
+			{ "price","3" }
+		}
 	);
 
 	std::cout << res.text << std::endl;
 }
 ```
 
-### GET Request (JSON)
+### 예제 3. JSON Request
 ```cpp
-void SendJsonRequestMethodGet(const std::string& URL, const std::string& body)
+// METHOD: GET
+void DoJsonRequestMethodGet(const char* url, const char* body_data)
 {
 	wrap::Response res = wrap::HttpsRequest(
-		wrap::Url{ URL },
-		wrap::Header{{"Connection", "close"}, { "Content-type", "application/json" }, { "Accept", "text/plain" }},
-		wrap::Body{body}
+		wrap::Url{ url },
+		wrap::Header{
+			{"Connection", "close"}, 
+			{ "Content-type", "application/json" }, 
+			{ "Accept", "text/plain" }
+		},
+		wrap::Body{body_data}
 	);
 
 	std::cout << res.text << std::endl;
 }
 ```
 
-### POST Request (JSON)
 ```cpp
-void SendJsonRequestMethodPost(const std::string& URL, const std::string& body)
+// METHOD: POST
+void DoJsonRequestMethodPost(const char* url, const char* body_data)
 {
 	wrap::Response res = wrap::HttpsRequest(
-		wrap::Url{ URL },
-		wrap::Header{{"Connection", "close"}, { "Content-type", "application/json" }, { "Accept", "text/plain" }},
+		wrap::Url{ url },
+		wrap::Header{
+			{"Connection", "close"}, 
+			{ "Content-type", "application/json" }, 
+			{ "Accept", "text/plain" }
+		},
 		wrap::Method{ "POST" },
-		wrap::Body{body}
+		wrap::Body{ body_data }
 	);
 
 	std::cout << res.text << std::endl;
 }
 ```
 
-### 사용하는 부분
+#### 실제 사용 예시
+
 ```cpp
+int main()
 {
-	// Postman Echo Test
-	SendRequestMethodGet();
-	SendRequestMethodPost();
+	const char* auth_check_url = "http://127.0.0.1:11502/AuthCheck";
+	const char* inapp_check_url = "http://127.0.0.1:11502/InAppCheck";
 
+	const auto auth_check_body_data =
+		R"(
+			{
+				"AuthID":"test01",
+				"AuthToken":"DUWPQCFN5DQF4P"
+			}
+		)";
 
-	// FakerHiveServer AuthCheck Test
-	const std::string AUTH_CHECK_SERVER_URL = "http://127.0.0.1:11502/AuthCheck";
-	std::string authCheckReqData = R"(
-		{
-			"AuthID":"cov1013@com2us.com",
-			"AuthToken":"Test"
-		}
-	)";
-	SendJsonRequestMethodGet(AUTH_CHECK_SERVER_URL, authCheckReqData);
-	SendJsonRequestMethodPost(AUTH_CHECK_SERVER_URL, authCheckReqData);
+	const auto inapp_check_body_data =
+		R"(
+			{
+				"Receipt":"WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d"
+			}
+		)";
 
+	DoJsonRequestMethodGet(auth_check_url, auth_check_body_data);
+	DoJsonRequestMethodPost(auth_check_url, auth_check_body_data);
+	DoJsonRequestMethodPost(inapp_check_url, inapp_check_body_data);
 
-	// FakerHiveServer InAppCheck Test
-	const std::string INAPP_CHECK_SERVER_URL = "http://127.0.0.1:11502/InAppCheck";
-	std::string inAppCheckReqData = R"(
-		{
-			"Receipt":"WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d"
-		}
-	)";
-	SendJsonRequestMethodPost(INAPP_CHECK_SERVER_URL, inAppCheckReqData);
+	return 0;
 }
 ```
