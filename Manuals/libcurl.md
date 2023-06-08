@@ -40,23 +40,23 @@
 
 ![install_08](../Images/libcurl/install_08.png)
 
-9. 자신의 프로젝트에서 `libcurl` 라이브러리의 헤더 파일과 라이브러리 파일을 Import한다.
+9. 자신의 프로젝트에서 `libcurl` 라이브러리를 Import한다.
 
-- 해당 문서에서는 `Visual Studio`에서 `C++ 라이브러리`를 `Import`하는 방법에 대해서는 설명하지 않는다. 
-- 예제 코드( `~/ExampleCodes/libcurlExample`)의 프로젝트 설정 부분 참고한다.
+예제 코드( `~/ExampleCodes/libcurlExample`)의 **프로젝트 설정 부분 참고**
 
-## 라이브러리 설명 (TODO)
+## 라이브러리 설명
 
-- `Callback` 방식으로 작동하는 라이브러리다.
-- 등록한 `Callback` 함수에서 응답 데이터를 메모리 또는 파일로 저장할 수 있다.
-- 만약 콜백 함수를 지정하지 않으면, `stdout`으로 응답 데이터가 출력된다.
-- [libcurl 공식 Tutorial 번역](https://docs.google.com/document/d/e/2PACX-1vQeGYH_LQigaj8rh8Ers2MVoopAdCuFacnnH2DHKF1Ie0qxUlcdK5_uwwlnVah5zX9DR39kEONUILie/pub )
+- 응답 데이터를 콜백 함수로 핸들링한다. (*응답 데이터를 메모리 또는 파일로 저장할 수 있다.*)
+- 콜백 함수를 지정하지 않으면 표준 출력 장치에(`stdout`) 자동 출력된다.
 
-## 예제코드
+## 라이브러리 사용하기
 
-### Callback Function
+가장 먼저 응답 데이터 수신 후 호출될 콜백 함수를 선언 및 정의한다.
+
+### `Callback Function` 예제
+
 ```cpp
-size_t OnResponseData(char* ptr, size_t size, size_t nmemb, std::string* stream)
+size_t OnResponse(char* ptr, size_t size, size_t nmemb, std::string* stream)
 {
 	int realsize = size * nmemb;
 
@@ -66,113 +66,176 @@ size_t OnResponseData(char* ptr, size_t size, size_t nmemb, std::string* stream)
 }
 ```
 
-### GET Request (JSON)
+### 예제 1. METHOD : GET
+
 ```cpp
-void SendJsonRequestMethodGet(const std::string& URL, const std::string& body)
+const bool ExampleMethodGet()
 {
-	CURL* curl;
-	curl = curl_easy_init();
+	const char* url = "https://www.postman-echo.com/";
+
+	CURL* curl = curl_easy_init();
 
 	if (curl == NULL)
 	{
-		printf("Failed intialize curl instance");
-		return;
+		return false;
 	}
 
-	CURLcode res;
+	// URL
+	curl_easy_setopt(curl, CURLOPT_URL, url);
 
-	// Header 세팅
-	curl_slist* header = NULL;
-	header = curl_slist_append(header, "Content-Type: application/json");
+	// METHOD
+	// DEFAULT : GET
 
-	curl_easy_setopt(curl, CURLOPT_URL, URL.c_str());
-
-	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
-
-	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
-	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
-
-	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
-	curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body.length());
-
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, OnResponseData);
-
-	res = curl_easy_perform(curl);
-
-	curl_easy_cleanup(curl);
-	curl_slist_free_all(header);
+	// EXECUTE
+	CURLcode res = curl_easy_perform(curl);
 
 	if (res != CURLE_OK)
 	{
-		fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+		std::cout << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+		return false;
 	}
+
+	curl_easy_cleanup(curl);
+
+	// callback 함수가 없으면 stdout 으로 출력된다.
+
+	return true;
 }
 ```
 
-### POST Request (JSON)
+### 예제 2. METHOD : POST
+
 ```cpp
-void SendJsonRequestMethodPost(const std::string& URL, const std::string& body)
+const bool ExampleMethodPost()
 {
-	CURL* curl;
-	curl = curl_easy_init();
+	const char* url_post = "https://www.postman-echo.com/";
+
+	CURL* curl = curl_easy_init();
+
+	if (curl == NULL)
+	{
+		return false;
+	}
+
+	curl_slist* header = nullptr; 
+
+	// URL
+	curl_easy_setopt(curl, CURLOPT_URL, url_post);
+
+	// METHOD
+	curl_easy_setopt(curl, CURLOPT_POST, 1L);
+
+	// HEADERS
+	header = curl_slist_append(header, "Content-Type: application/json");
+	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
+
+	// SSL
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 1L);
+
+	// DATA
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "data");
+
+	// EXECUTE
+	CURLcode res = curl_easy_perform(curl);
+
+	if (res != CURLE_OK)
+	{
+		std::cout << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+		return false;
+	}
+
+	curl_easy_cleanup(curl);
+
+	// callback 함수가 없으면 stdout 으로 출력된다.
+
+	return true;
+}
+```
+
+### 예제 3. JSON Request
+```cpp
+const bool DoJsonRequest(
+	const char* url, 
+	const char* body_data, 
+	const bool isPostMethod = false,
+	const bool isSSL = false)
+{
+	CURL* curl = curl_easy_init();
 
 	if(curl == NULL)
 	{
-		printf("Failed intialize curl instance");
-		return;
+		std::cout << "Failed intialize curl instance" << std::endl;
+		return false;
 	}
 
-	CURLcode res;
+	const auto body_data_len = strlen(body_data);
+	curl_slist* header = nullptr;
 
-	// Header 세팅
-	curl_slist* header = NULL;
+	// URL
+	curl_easy_setopt(curl, CURLOPT_URL, url);
+
+	// HEADER
 	header = curl_slist_append(header, "Content-Type: application/json");
-
-	curl_easy_setopt(curl, CURLOPT_URL, URL.c_str());
-
 	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
 
-	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
-	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
+	// SSL
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, isSSL);
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, isSSL);
 
+	// METHOD
 	curl_easy_setopt(curl, CURLOPT_POST, 1L);
 
-	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
-	curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body.length());
+	// BODY DATA
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body_data);
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body_data_len);
 
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, OnResponseData);
+	// CALLBACK
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, OnResponse);
 
-	res = curl_easy_perform(curl);
+	// SEND
+	CURLcode res = curl_easy_perform(curl);
 
+	// CLEANUP
 	curl_easy_cleanup(curl);
 	curl_slist_free_all(header);
 
 	if (res != CURLE_OK)
 	{
-		fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+		std::cout << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+		return false;
 	}
+
+	return true;
 }
 ```
 
-### 사용하는 부분
+#### 실제 사용 예시
 ```cpp
+int main()
 {
-	const std::string AUTH_CHECK_URL = "http://127.0.0.1:11502/AuthCheck";
-	std::string authCheckData = R"(
-		{
-			"AuthID": "test01", 
-			"AuthToken":"DUWPQCFN5DQF4P"
-		}
-	)";
-	SendJsonRequestMethodGet(AUTH_CHECK_URL, authCheckData);
-	SendJsonRequestMethodPost(AUTH_CHECK_URL, authCheckData);
+	const char* auth_check_url = "http://127.0.0.1:11502/AuthCheck";
+	const char* inapp_check_url = "http://127.0.0.1:11502/InAppCheck";
 
-	const std::string INAPP_CHECK_URL = "http://127.0.0.1:11502/InAppCheck";
-	std::string inAppCheckData = R"(
-		{
-			"Receipt": "WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d"
-		}
-	)";
-	SendJsonRequestMethodPost(INAPP_CHECK_URL, inAppCheckData);
+	const auto auth_check_body_data =
+		R"(
+			{
+				"AuthID":"test01",
+				"AuthToken":"DUWPQCFN5DQF4P"
+			}
+		)";
+
+	const auto inapp_check_body_data =
+		R"(
+			{
+				"Receipt":"WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d"
+			}
+		)";
+
+	DoJsonRequest(auth_check_url, auth_check_body_data);
+	DoJsonRequest(auth_check_url, auth_check_body_data, true);
+	DoJsonRequest(inapp_check_url, inapp_check_body_data, true);
+
+	return 0;
 }
 ```
