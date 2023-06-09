@@ -139,33 +139,54 @@ void Init()
 - [Document](http://matov.me/curly.hpp)
 - `libcurl` 필요
 - `libcurl`을 `C++ 17`로 랩핑한 라이브러리
+- **`C++ 17` 이상** 필요
 - 요청이 **비동기로 진행**된다.
 
 ## [curlite](./Manuals/curlite.md)
 - [GitHub](https://github.com/grynko/curlite )  
 - 사용하기 쉽다
 - `libcurl` 필요
-- **C++ 11 이상** 필요.
+- **`C++ 11` 이상** 필요.
 - **멀티스레드에서 사용 불가능.**
 - **현재 개발중**
 
 ## [Swish](./Manuals/Swish.md)
 - [GitHub](https://github.com/lamarrr/swish)    
 - `libcurl` 필요
-- **`C++ 17` 이상**
+- **`C++ 17` 이상** 필요
 - **JSON 송신 불가능.**
 - 정보가 너무 부족하다. (*현재로서는 라이브러리를 직접 분석하거나, 기능을 추가해야함.*)
   
-## Httplib (cpp-httplib) 
-- A C++11 single-file header-only cross platform HTTP/HTTPS library
-- Header-Only 라이브러리.
-- 크로스 플랫폼 라이브러리.
-- **`C++ 11` 이상** 
-- 블록킹 소켓 I/O
+## [cpp-httplib](./Manuals/cpp-httplib.md)
 - [GitHub](https://github.com/yhirose/cpp-httplib)
-- [Sample](https://cdecl.github.io/dev/cpp-httplib-sample/ )
-- [cpp-httplib + nlohmann.json를 사용하여 http 요청하기](https://docs.google.com/document/d/e/2PACX-1vTpb2n7xjHJAR0g8JEEI0BzDgzZAJkfEVTUJs5NL-yogwRGqs_nRNml99DQohaUdOxjhy1ffjaWzLtR/pub )  
-- [nlohmann.json](https://github.com/nlohmann/json )
+- 사용하기 쉽다.
+- **Header-Only** 라이브러리.
+- 크로스 플랫폼 지원
+- 해당 라이브러리로 서버도 구현 가능.
+- **`C++ 11` 이상** 필요.
+- **내부적으로 `Blocking Socket`**을 사용한다. (*`non-blocking` 소켓 기능은 지원하지 않는다.*)
+
+```c
+#include <httplib.h>
+#include <iostream>
+
+int main() {
+
+  httplib::Headers headers = {{"Content-Type", "application/json"}};
+  std::string body = R"({"AuthID":"test01","AuthToken":"DUWPQCFN5DQF4P"})";
+  httplib::Client cli("127.0.0.1", 11502);
+
+  if (auto res = cli.Post("/AuthCheck", headers, body, "application/json")) {
+    std::cout << res->status << std::endl;
+    std::cout << res->get_header_value("Content-Type") << std::endl;
+    std::cout << res->body << std::endl;
+  } else {
+    std::cout << "error code: " << res.error() << std::endl;
+  }
+
+  return 0;
+}
+```
   
 ## malloy (`boost` 설치 필요) 
 - [GitHub](https://github.com/tectu/malloy )
