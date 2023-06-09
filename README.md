@@ -164,7 +164,7 @@ void Init()
 - 크로스 플랫폼 지원
 - 해당 라이브러리로 서버도 구현 가능.
 - **`C++ 11` 이상** 필요.
-- **내부적으로 `Blocking Socket`**을 사용한다. (*`non-blocking` 소켓 기능은 지원하지 않는다.*)
+- **내부적으로 Blocking Socket**을 사용한다. (*`non-blocking` 소켓 기능은 지원하지 않는다.*)
 
 ```c
 #include <httplib.h>
