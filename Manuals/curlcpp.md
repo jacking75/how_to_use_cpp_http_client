@@ -10,9 +10,7 @@
 
 ## 라이브러리 설치하기
 
-`curlcpp` 라이브러리는 기본적으로 `CMake` 파일이 제공된다. 
-
-하지만 Windows에서 `CMake`를 사용하여 `curlcpp` 솔루션 파일을 생성하는 경우 구성 파일을 생성하는 과정에서 `curl` 경로를 찾을 수 없다는 에러가 발생한다.
+`curlcpp` 라이브러리는 기본적으로 `CMake` 파일이 제공된다. 하지만 Windows에서 `CMake`를 사용하여 `curlcpp` 솔루션 파일을 생성하는 경우 구성 파일을 생성하는 과정에서 `curl` 경로를 찾을 수 없다는 에러가 발생한다.
 
 따라서 해당 문서에서는 `Visual Stduio`를 사용하여 직접 `curlcpp` 라이브러리를 빌드한다.
 
@@ -38,9 +36,9 @@
 
 ![install_04](../Images/curlcpp/install_04.png)
 
-5. [GitHub](https://github.com/JosephP91/curlcpp)에서 프로젝트 다운
+5. [GitHub](https://github.com/JosephP91/curlcpp)에서 `curlcpp` 라이브러리 프로젝트 다운로드
 
-6. 프로젝트 폴더 내부의 다음 파일들을 빌드용 프로젝트에 포함
+6. 다운받은 프로젝트 폴더 내부의 다음 파일들을 빌드용 프로젝트에 포함
 
 ![install_06_01](../Images/curlcpp/install_06_01.png)
 
@@ -54,7 +52,7 @@
 
 ### 내 프로젝트로 라이브러리 Import하기
 
-#### (참고) 예제에서는 프로젝트 내부에 `thirdparty`라는 별도의 폴더를 생성하여 다음과 같이 라이브러리 파일들을 관리하고 있다.
+- (*참고사항*) 예제에서는 프로젝트 내부에 `thirdparty`라는 별도의 폴더를 생성하여 다음과 같이 라이브러리 파일들을 관리하고 있다.
 
 ![import_ex_thirdparty_01](../Images/curlcpp/import_ex_thirdparty_01.png)
 
