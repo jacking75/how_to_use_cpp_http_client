@@ -12,13 +12,22 @@
 
 ## 라이브러리 설치하기
 
+- (*참고사항*) 예제에서는 프로젝트 내부에 `thirdparty`라는 별도의 폴더를 생성하여 다음과 같이 라이브러리 파일들을 관리하고 있다.
+
+![import_ex_thirdparty_01](../Images/swish/import_ex_thirdparty_01.png)
+
 1. [GitHub](https://github.com/lamarrr/swish)에서 프로젝트를 다운로드한다.
 
 2. 다운로드 한 프로젝트 폴더 내부에서 `swish` 폴더를 자신의 프로젝트로 옮긴다.
 
-![install_01](../Images/swish/install_01.png)
+![install_02](../Images/swish/install_02.png)
 
-3. 
+![import_ex_thirdparty_02](../Images/swish/import_ex_thirdparty_02.png)
+
+3. 소스코드 Include
+
+![install_03](../Images/swish/install_03.png)
+
 
 ## 라이브러리 설명
 
