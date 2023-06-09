@@ -1,7 +1,8 @@
 #include <string>
 #include <iostream>
 #include <cstring>
-#include <curl/curl.h>
+
+#include "curl/curl.h"
 #include "curly.hpp"
 
 curly_hpp::performer performer;

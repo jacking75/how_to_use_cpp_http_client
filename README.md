@@ -129,7 +129,7 @@ void Init()
 - **멀티스레드에서 사용 불가능.**
 - **현재 개발중**
 
-## [Swish](./Manuals/curlite.md)
+## [Swish](./Manuals/Swish.md)
 - `libcurl` 필요
 - [GitHub](https://github.com/lamarrr/swish)    
 - **`C++ 17` 이상**

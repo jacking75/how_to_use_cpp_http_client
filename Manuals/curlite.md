@@ -14,7 +14,7 @@
 
 2. 다운로드 한 프로젝트 폴더 내부의 다음 파일들을 자신의 프로젝트로 옮긴다.
 
-![install_02_01](../Images/curlite/install_02_01.png)
+![install_02_01](../Images/curlite/install_02.png)
 
 3. 해당 파일들을 자신의 프로젝트에 포함시킨다.
 

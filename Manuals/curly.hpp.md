@@ -22,6 +22,20 @@
 
 ![install_03](../Images/curly/install_03.png)
 
+4. `C++` 버전 변경
+
+![install_04](../Images/curly/install_04.png)
+
+5. `curly.hpp` 파일 진입부에 `#define` 추가
+
+`curly.cpp` 파일 내부에서 `std::max()`, `std::min()`을 사용하고 있는데 해당 함수의 이름이 `minwindef.h` 파일의 매크로와 동일해서 인식 에러가 발생한다.
+
+![error_01](../Images/curly/error_01.png)
+
+따라서 `curly.hpp` 파일에 다음과 같이 `#define NOMINMAX` 추가한다.
+
+![install_05](../Images/curly/install_05.png)
+
 
 ## 라이브러리 설명
 
