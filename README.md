@@ -104,38 +104,57 @@ void Init()
 # 외부 라이브러리
   
 ## [HappyHTTP](./Manuals/HappyHTTP.md)
+- [GitHub](https://github.com/mingodad/HappyHTTP)
+- 사용하기 간편하다. (*인터페이스가 직관적*)
+- 요청이 **비동기로 진행**된다.
+- 파이프라이닝을 지원한다. 따라서 **응답을 대기하지 않고 여러 번 요청**할 수 있다.
+- `Windows`, `Linux`, `OSX`를 지원한다.
+- 응답 데이터를 콜백 함수(`OnBegin`, `OnData`, `OnComplete`)를 통해 핸들링한다.
+- 별도의 라이브러리 설치 없이 **해당 라이브러리의 소스 코드만으로 사용 가능**하다.
 
 ## [WNetWrap](./Manuals/WNetWrap.md)
+- [GitHub](https://github.com/hack-tramp/WNetWrap)
+- 사용하기 간편하다. (*라이브러리 기능이 직관적이다.*)
+- `Win32API`의 `wininet.h`의 기능을 사용하여 개발된 **Widnwos 네이티브 라이브러리**다.
+- 별도의 라이브러리 설치 없이 해당 라이브러리의 **소스 코드만으로 사용 가능**하다.
+- 라이브러리 내부적으로 **메모리 누수**가 존재한다.
+- 멀티스레드에 안전하지 않다.
+- 요청 시 `Timeout` 기능을 사용하는 경우 라이브러리 내부에서 **별도의 스레드를 생성**한다.
 
 ## [libcurl](./Manuals/libcurl.md)
+- [GitHub](https://github.com/curl/curl)
+- `windows` 지원
+- 가장 오래되고 안정된 Client 네트워크 라이브러리.
+- 응답 데이터를 콜백 함수로 핸들링한다. (*응답 데이터를 메모리 또는 파일로 저장할 수 있다.*)
+- 콜백 함수를 지정하지 않으면 표준 출력 장치에(`stdout`) 자동 출력된다.
 
 ## [curlcpp](./Manuals/curlcpp.md)
-- [공식사이트](https://josephp91.github.io/curlcpp)
+- [GitHub](https://github.com/JosephP91/curlcpp)
+- [Document](https://josephp91.github.io/curlcpp)
 - `libcurl` 필요
 - `libcurl`의 **C++ 버전**
 
 ## [curly.hpp](./Manuals/curly.hpp.md)
-- `libcurl` 필요
 - [GitHub](https://github.com/BlackMATov/curly.hpp)
-- [공식 사이트](http://matov.me/curly.hpp)
+- [Document](http://matov.me/curly.hpp)
+- `libcurl` 필요
 - `libcurl`을 `C++ 17`로 랩핑한 라이브러리
-- **비동기 요청 기능 지원**
+- 요청이 **비동기로 진행**된다.
 
 ## [curlite](./Manuals/curlite.md)
-- `libcurl` 필요
 - [GitHub](https://github.com/grynko/curlite )  
 - 사용하기 쉽다
-- **C++ 11 이상**
+- `libcurl` 필요
+- **C++ 11 이상** 필요.
 - **멀티스레드에서 사용 불가능.**
 - **현재 개발중**
 
 ## [Swish](./Manuals/Swish.md)
-- `libcurl` 필요
 - [GitHub](https://github.com/lamarrr/swish)    
+- `libcurl` 필요
 - **`C++ 17` 이상**
-- JSON 송신 불가능.
-- 정보가 너무 부족하다.
-- 현재로서는 라이브러리를 직접 분석하거나, 기능을 추가해야함.
+- **JSON 송신 불가능.**
+- 정보가 너무 부족하다. (*현재로서는 라이브러리를 직접 분석하거나, 기능을 추가해야함.*)
   
 ## Httplib (cpp-httplib) 
 - A C++11 single-file header-only cross platform HTTP/HTTPS library
