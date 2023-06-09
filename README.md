@@ -103,45 +103,47 @@ void Init()
   
 # 외부 라이브러리
   
-## [HappyHTTP](./Manuals/HappyHTTP.md)
+## [HappyHTTP](~/Manuals/HappyHTTP.md)
 
-## [WNetWrap](./Manuals/WNetWrap.md)
+## [WNetWrap](~/Manuals/WNetWrap.md)
 
-## [libcurl](./Manuals/libcurl.md)
+## [libcurl](~/Manuals/libcurl.md)
 
-## curlcpp (`libcurl` 설치 필요)
-- `libcurl`의 **C++ 버전**
-- [GitHub](https://github.com/JosephP91/curlcpp )  
-- [공식사이트](https://josephp91.github.io/curlcpp  )
+## [curlcpp](~/Manuals/curlcpp.md)
 
-## curly.hpp (`libcurl` 설치 필요)
-- [공식 사이트](http://matov.me/curly.hpp/ )
-- Simple cURL C++17 wrapper  
-- Asynchronous requests
-- **C++ 17 이상**
-  
-### 예제코드
-```cpp
-auto request = net::request_builder()
-    .method(net::http_method::POST)
-    .url("http://www.httpbin.org/post")
-    .header("Content-Type", "application/json")
-    .content(R"({"hello" : "world"})")
-    .send();
+## [curly.hpp](~/Manuals/curly.hpp.md)
+- `libcurl` 필요
+- [GitHub](https://github.com/BlackMATov/curly.hpp)
+- [공식 사이트](http://matov.me/curly.hpp)
+- `libcurl`을 `C++ 17`로 랩핑한 라이브러리
+- **비동기 요청 기능 지원**
 
-auto response = request.take();
-std::cout << "Body content: " << response.content.as_string_view() << std::endl;
-std::cout << "Content Length: " << response.headers["content-length"] << std::endl;
-```
-
-## Curlite (`libcurl` 설치 필요)
+## [curlite](~/Manuals/curlite.md)
+- `libcurl` 필요
 - [GitHub](https://github.com/grynko/curlite )  
 - 사용하기 쉽다
 - **C++ 11 이상**
+- **멀티스레드에서 사용 불가능.**
+- **현재 개발중**
 
-## Swish (`libcurl` 설치 필요)
+## [Swish](~/Manuals/curlite.md)
+- `libcurl` 필요
 - [GitHub](https://github.com/lamarrr/swish )    
-- **C++ 17 이상**
+- **`C++ 17` 이상**
+- JSON 송신 불가능.
+- 정보가 너무 부족하다.
+- 현재로서는 라이브러리를 직접 분석하거나, 기능을 추가해야함.
+  
+## Httplib (cpp-httplib) 
+- A C++11 single-file header-only cross platform HTTP/HTTPS library
+- Header-Only 라이브러리.
+- 크로스 플랫폼 라이브러리.
+- **`C++ 11` 이상** 
+- 블록킹 소켓 I/O
+- [GitHub](https://github.com/yhirose/cpp-httplib)
+- [Sample](https://cdecl.github.io/dev/cpp-httplib-sample/ )
+- [cpp-httplib + nlohmann.json를 사용하여 http 요청하기](https://docs.google.com/document/d/e/2PACX-1vTpb2n7xjHJAR0g8JEEI0BzDgzZAJkfEVTUJs5NL-yogwRGqs_nRNml99DQohaUdOxjhy1ffjaWzLtR/pub )  
+- [nlohmann.json](https://github.com/nlohmann/json )
   
 ## malloy (`boost` 설치 필요) 
 - [GitHub](https://github.com/tectu/malloy )
@@ -151,12 +153,3 @@ std::cout << "Content Length: " << response.headers["content-length"] << std::en
 ## EasyHttp (`POCO` 설치 필요) 
 - [GitHub](https://github.com/sony/easyhttpcpp )
 - A cross-platform HTTP client library with a focus on usability and speed.
-  
-## Httplib (cpp-httplib) 
-- A C++11 single-file header-only cross platform HTTP/HTTPS library
-- This library uses **'blocking'** socket I/O
-  
-- [GitHub](https://github.com/yhirose/cpp-httplib)
-	- [Sample](https://cdecl.github.io/dev/cpp-httplib-sample/ )
-	- [cpp-httplib + nlohmann.json를 사용하여 http 요청하기](https://docs.google.com/document/d/e/2PACX-1vTpb2n7xjHJAR0g8JEEI0BzDgzZAJkfEVTUJs5NL-yogwRGqs_nRNml99DQohaUdOxjhy1ffjaWzLtR/pub )  
-    	- [nlohmann.json](https://github.com/nlohmann/json )
