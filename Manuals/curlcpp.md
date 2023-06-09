@@ -12,7 +12,7 @@
 
 `curlcpp` 라이브러리는 기본적으로 `CMake` 파일이 제공된다. 
 
-하지만 Windows에서 `CMake`를 사용할 경우 구성 파일을 생성하는 과정에서 `curl`에 대한 경로를 찾을 수 없다는 에러가 발생한다.
+하지만 Windows에서 `CMake`를 사용하여 `curlcpp` 솔루션 파일을 생성하는 경우 구성 파일을 생성하는 과정에서 `curl` 경로를 찾을 수 없다는 에러가 발생한다.
 
 따라서 해당 문서에서는 `Visual Stduio`를 사용하여 직접 `curlcpp` 라이브러리를 빌드한다.
 
@@ -22,35 +22,43 @@
 
 ![install_01](../Images/curlcpp/install_01.png)
 
-2. 생성된 프로젝트에 `libcurl` 라이브러리 **헤더 파일 복사** (*예제에서는 `/thirdparty/curl` 폴더를 생성하여 이곳에 복사했다.*)
+2. 빌드용 프로젝트에 `libcurl` 라이브러리 **헤더 파일 복사** (*예제에서는 `/thirdparty/curl` 폴더를 생성하여 이곳에 복사했다.*)
 
 ![install_02](../Images/curlcpp/install_02.png)
 
 3. **SDL 검사** OFF 
 
 - `curlcpp` 라이브러리 내부에서 안전하지 않은 함수 (*`strcpy()`*)가 사용되고 있다.
+- 따라서 **SDL 검사**를 사용하는 상태에서 빌드할 경우 에러가 발생한다.
+- 실제 사용시에는 안전하지 않은 함수를 안전한 함수로 변경하여 사용할 것을 추천한다.
 
 ![install_03](../Images/curlcpp/install_03.png)
 
-- (*선택사항*) `libcurl` 헤더 파일 폴더를 **추가 포함 디렉터리**에 추가
+4. `libcurl` 헤더 파일 폴더를 **추가 포함 디렉터리**에 추가(*선택사항*)
 
-![include_path](../Images/curlcpp/include_path.png)
+![install_04](../Images/curlcpp/install_04.png)
 
-4. [GitHub](https://github.com/JosephP91/curlcpp)에서 프로젝트 다운
+5. [GitHub](https://github.com/JosephP91/curlcpp)에서 프로젝트 다운
 
-5. 프로젝트 폴더 내부의 다음 파일들을 빌드용 프로젝트에 포함
+6. 프로젝트 폴더 내부의 다음 파일들을 빌드용 프로젝트에 포함
 
-![install_04_01](../Images/curlcpp/install_04_01.png)
+![install_06_01](../Images/curlcpp/install_06_01.png)
 
-![install_04_02](../Images/curlcpp/install_04_02.png)
+![install_06_02](../Images/curlcpp/install_06_02.png)
 
-![install_04_03](../Images/curlcpp/install_04_03.png)
+![install_06_03](../Images/curlcpp/install_06_03.png)
 
-6. 빌드.
+7. 빌드.
 
 ![install_05](../Images/curlcpp/install_05.png)
 
 ### 내 프로젝트로 라이브러리 Import하기
+
+#### (참고) 예제에서는 프로젝트 내부에 `thirdparty`라는 별도의 폴더를 생성하여 다음과 같이 라이브러리 파일들을 관리하고 있다.
+
+![import_ex_thirdparty_01](../Images/curlcpp/import_ex_thirdparty_01.png)
+
+![import_ex_thirdparty_02](../Images/curlcpp/import_ex_thirdparty_02.png)
 
 1. 라이브러리 헤더 파일을 내 프로젝트(**빌드용 프로젝트가 아니다**)로 복사
 
@@ -59,12 +67,6 @@
 2. 빌드된 라이브러리를 내 프로젝트(**빌드용 프로젝트가 아니다**)로 복사
 
 ![import_02](../Images/curlcpp/import_02.png)
-
-- (*참고사항*) 예제에서는 프로젝트 내부에 `thirdparty`라는 별도의 폴더를 생성하여 다음과 같이 라이브러리 파일들을 관리하고 있다.
-
-![import_ex_thirdparty_01](../Images/curlcpp/import_ex_thirdparty_01.png)
-
-![import_ex_thirdparty_02](../Images/curlcpp/import_ex_thirdparty_02.png)
 
 3. 소스 파일 include
 

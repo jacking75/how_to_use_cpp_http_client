@@ -36,7 +36,7 @@
 
 ### 내 프로젝트로 라이브러리 Import하기
 
-1. 라이브러리 헤더 파일을 내 프로젝트로 복사
+1. 라이브러리 헤더 파일을 내 프로젝트로 복사 (*헤더 파일을 제외한 파일은 복사할 필요 없다.*)
 
 ![import_01](../Images/libcurl/import_01.png)
 
@@ -44,7 +44,7 @@
 
 ![import_02](../Images/libcurl/import_02.png)
 
-- (*참고사항*) 예제에서는 프로젝트 내부에 `thirdparty`라는 별도의 폴더를 생성하여 다음과 같이 라이브러리 파일들을 관리하고 있다.
+- (*참고사항*) 예제 파일에서는 프로젝트 내부에 `thirdparty`라는 별도의 폴더를 생성하여 다음과 같이 라이브러리 파일들을 관리하고 있다.
 
 ![import_ex_thirdparty_01](../Images/libcurl/import_ex_thirdparty_01.png)
 
@@ -62,13 +62,13 @@
 
 #### 정적 라이브러리 (`.lib`)로 Import하기
 
-라이브러리를 정적으로 프로젝트에 적용하기 위해서는 몇가지 추가적인 설정을 진행해야한다.
+ 정적 라이브러리로 사용하기 위해서는 몇 가지 추가적인 설정을 진행해야 한다.
 
 1. 전처리기 추가
 
 ![static_01](../Images/libcurl/static_01.png)
 
-2. `libcurl` 라이브러리에서 사용하는 다른 라이브러리 추가
+2. 라이브러리 추가
 
 ![static_02](../Images/libcurl/static_02.png)
 
