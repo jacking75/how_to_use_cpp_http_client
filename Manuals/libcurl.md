@@ -1,10 +1,10 @@
 # `libcurl` 사용법
 
-예제 코드 : `~/ExampleCodes/libcurlExample`
+- 예제 코드 경로 : `ExampleCodes/libcurlExample`
 
 ## 들어가기전에
 
-해당 문서에서는 `Windows` 환경에서의 설치 방법만 설명한다.
+- 해당 문서에서는 `Windows` 환경에서의 설치 방법만 설명한다.
 
 ## 라이브러리 설치하기
 
@@ -36,6 +36,12 @@
 
 ### 내 프로젝트로 라이브러리 Import하기
 
+- (*참고사항*) 예제 파일에서는 프로젝트 내부에 `thirdparty`라는 별도의 폴더를 생성하여 다음과 같이 라이브러리 파일들을 관리하고 있다.
+
+![import_ex_thirdparty_01](../Images/libcurl/import_ex_thirdparty_01.png)
+
+![import_ex_thirdparty_02](../Images/libcurl/import_ex_thirdparty_02.png)
+
 1. 라이브러리 헤더 파일을 내 프로젝트로 복사 (*헤더 파일을 제외한 파일은 복사할 필요 없다.*)
 
 ![import_01](../Images/libcurl/import_01.png)
@@ -43,12 +49,6 @@
 2. 빌드된 라이브러리를 내 프로젝트로 복사
 
 ![import_02](../Images/libcurl/import_02.png)
-
-- (*참고사항*) 예제 파일에서는 프로젝트 내부에 `thirdparty`라는 별도의 폴더를 생성하여 다음과 같이 라이브러리 파일들을 관리하고 있다.
-
-![import_ex_thirdparty_01](../Images/libcurl/import_ex_thirdparty_01.png)
-
-![import_ex_thirdparty_02](../Images/libcurl/import_ex_thirdparty_02.png)
 
 3. 소스 파일 include
 
