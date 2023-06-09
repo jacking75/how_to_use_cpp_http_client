@@ -110,6 +110,9 @@ void Init()
 ## [libcurl](./Manuals/libcurl.md)
 
 ## [curlcpp](./Manuals/curlcpp.md)
+- [공식사이트](https://josephp91.github.io/curlcpp)
+- `libcurl` 필요
+- `libcurl`의 **C++ 버전**
 
 ## [curly.hpp](./Manuals/curly.hpp.md)
 - `libcurl` 필요
@@ -128,7 +131,7 @@ void Init()
 
 ## [Swish](./Manuals/curlite.md)
 - `libcurl` 필요
-- [GitHub](https://github.com/lamarrr/swish )    
+- [GitHub](https://github.com/lamarrr/swish)    
 - **`C++ 17` 이상**
 - JSON 송신 불가능.
 - 정보가 너무 부족하다.

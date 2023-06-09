@@ -8,6 +8,8 @@
 
 ## 라이브러리 설치하기
 
+### 라이브러리 빌드하기
+
 1. [GitHub](https://github.com/curl/curl)에서 가장 최신 버전의 **Release** 페이지로 이동
 
 ![install_01](../Images/libcurl/install_01.png)
@@ -32,17 +34,43 @@
 
 ![install_06](../Images/libcurl/install_06.png)
 
-7. 빌드에 성공했다면, `~/build` 폴더에 생성된 라이브러리 파일들을 자신의 프로젝트로 복사한다. (*예제에서는 `DLL`로 빌드했다.*)
+### 내 프로젝트로 라이브러리 Import하기
 
-![install_07](../Images/libcurl/install_07.png)
+1. 라이브러리 헤더 파일을 내 프로젝트로 복사
 
-8. `~/include/curl` 폴더를 자신의 프로젝트에 복사한다. (*헤더 파일(`*.h`)을 제외한 나머지 파일들은 삭제해도 된다.*)
+![import_01](../Images/libcurl/import_01.png)
 
-![install_08](../Images/libcurl/install_08.png)
+2. 빌드된 라이브러리를 내 프로젝트로 복사
 
-9. 자신의 프로젝트에서 `libcurl` 라이브러리를 Import한다.
+![import_02](../Images/libcurl/import_02.png)
 
-예제 코드( `~/ExampleCodes/libcurlExample`)의 **프로젝트 설정 부분 참고**
+- (*참고사항*) 예제에서는 프로젝트 내부에 `thirdparty`라는 별도의 폴더를 생성하여 다음과 같이 라이브러리 파일들을 관리하고 있다.
+
+![import_ex_thirdparty_01](../Images/libcurl/import_ex_thirdparty_01.png)
+
+![import_ex_thirdparty_02](../Images/libcurl/import_ex_thirdparty_02.png)
+
+3. 소스 파일 include
+
+![import_03](../Images/libcurl/import_03.png)
+
+4. 라이브러리 파일 include
+
+![import_04_01](../Images/libcurl/import_04_01.png)
+
+![import_04_02](../Images/libcurl/import_04_02.png)
+
+#### 정적 라이브러리 (`.lib`)로 Import하기
+
+라이브러리를 정적으로 프로젝트에 적용하기 위해서는 몇가지 추가적인 설정을 진행해야한다.
+
+1. 전처리기 추가
+
+![static_01](../Images/libcurl/static_01.png)
+
+2. `libcurl` 라이브러리에서 사용하는 다른 라이브러리 추가
+
+![static_02](../Images/libcurl/static_02.png)
 
 ## 라이브러리 설명
 

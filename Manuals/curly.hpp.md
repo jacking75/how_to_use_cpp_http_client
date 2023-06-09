@@ -1,18 +1,28 @@
-
 # `curly.hpp` 사용법
 
 예제 코드 : `~/ExampleCodes/curlyExample`
 
 ## 들어가기전에
 
-해당 문서에서 설명할 `curlcpp` 라이브러리는 [libcurl]()을 `C++`로 랩핑한 라이브러리다.
+해당 문서에서 설명할 `curly.hpp` 라이브러리는 [libcurl](https://github.com/curl/curl)을 `C++`로 랩핑한 라이브러리다.
 
-따라서 해당 라이브러리를 사용하기 위해서는 프로젝트에 `libcurl` 라이브러리가 설치되어 있어야한다. 
+따라서 `curly.hpp` 라이브러리를 사용하기 위해서는 프로젝트에 `libcurl` 라이브러리가 설치되어 있어야한다. 
 
 (*`libcurl` 라이브러리 설치 방법은 다음 [문서](~/Manuals/libcurl.md)를 참고한다.*)
 
 ## 라이브러리 설치하기
 
+1. [GitHub](https://github.com/BlackMATov/curly.hpp)에서 프로젝트를 다운로드한다.
+
+2. 다운로드 한 프로젝트 폴더 내부의 다음 파일들을 자신의 프로젝트로 옮긴다.
+
+![install_02_01](../Images/curly/install_02_01.png)
+
+![install_02_02](../Images/curly/install_02_02.png)
+
+3. 해당 파일들을 자신의 프로젝트에 포함시킨다.
+
+![install_03](../Images/curly/install_03.png)
 
 
 ## 라이브러리 설명
