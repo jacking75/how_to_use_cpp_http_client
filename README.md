@@ -103,22 +103,22 @@ void Init()
   
 # 외부 라이브러리
   
-## [HappyHTTP](~/Manuals/HappyHTTP.md)
+## [HappyHTTP](./Manuals/HappyHTTP.md)
 
-## [WNetWrap](~/Manuals/WNetWrap.md)
+## [WNetWrap](./Manuals/WNetWrap.md)
 
-## [libcurl](~/Manuals/libcurl.md)
+## [libcurl](./Manuals/libcurl.md)
 
-## [curlcpp](~/Manuals/curlcpp.md)
+## [curlcpp](./Manuals/curlcpp.md)
 
-## [curly.hpp](~/Manuals/curly.hpp.md)
+## [curly.hpp](./Manuals/curly.hpp.md)
 - `libcurl` 필요
 - [GitHub](https://github.com/BlackMATov/curly.hpp)
 - [공식 사이트](http://matov.me/curly.hpp)
 - `libcurl`을 `C++ 17`로 랩핑한 라이브러리
 - **비동기 요청 기능 지원**
 
-## [curlite](~/Manuals/curlite.md)
+## [curlite](./Manuals/curlite.md)
 - `libcurl` 필요
 - [GitHub](https://github.com/grynko/curlite )  
 - 사용하기 쉽다
@@ -126,7 +126,7 @@ void Init()
 - **멀티스레드에서 사용 불가능.**
 - **현재 개발중**
 
-## [Swish](~/Manuals/curlite.md)
+## [Swish](./Manuals/curlite.md)
 - `libcurl` 필요
 - [GitHub](https://github.com/lamarrr/swish )    
 - **`C++ 17` 이상**
