@@ -111,6 +111,7 @@ Content-Type: application/json
 ## [WNetWrap](./Manuals/02_WNetWrap.md)
 - [WinINet](https://learn.microsoft.com/en-us/windows/win32/wininet/about-wininet) API로 개발
 - `Windows`만 지원
+- **`C++ 17` 이상** 필요.
 - 다른 라이브러리 **종속성 없음**
 - 현재 구현된 기능
 
