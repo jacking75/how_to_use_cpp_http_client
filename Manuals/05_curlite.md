@@ -87,7 +87,7 @@ void SendRequestJson(const char* url, const char* body, const bool isPost = fals
 }
 ```
 
-### 예제 코드 테스트
+### 사용 예시
 ```cpp
 #include <string>
 #include <iostream>

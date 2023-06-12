@@ -274,7 +274,7 @@ const bool SendRequestJson(const char* url, const char* body)
 }
 ```
 
-### 예제 테스트 코드
+### 사용 예시
 ```cpp
 int main()
 {

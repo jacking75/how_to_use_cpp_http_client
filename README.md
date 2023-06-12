@@ -143,14 +143,14 @@ Content-Type: application/json
 - 모든 요청은 **비동기로 동작** (*응답 대기 불필요, 여러 번 요청 가능*)
 - 응답 데이터는 콜백 함수로 핸들링
 
-## [Swish](./Manuals/Swish.md)
+## [Swish](./Manuals/07_Swish.md)
 - `libcurl` 필요
 - **`C++` 17 이상** 필요
 - `JSON` 포맷 지원 X
 - 직관적인 API
 - 정보가 너무 부족하다. (*현재로서는 라이브러리를 직접 분석하거나, 기능을 추가해야함.*)
   
-## [cpp-httplib](./Manuals/cpp-httplib.md)
+## [cpp-httplib](./Manuals/08_cpp-httplib.md)
 - 직관적인 API
 - 크로스 플랫폼 지원
 - **`C++ 11` 이상** 필요
