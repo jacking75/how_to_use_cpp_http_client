@@ -148,7 +148,7 @@ void Init()
 - `libcurl` 필요
 - **`C++ 11` 이상** 필요.
 - **멀티스레드에서 사용 불가능.**
-- **현재 개발중**
+- 현재 개발중인 라이브러리다.
 
 ## [Swish](./Manuals/Swish.md)
 - [GitHub](https://github.com/lamarrr/swish)    

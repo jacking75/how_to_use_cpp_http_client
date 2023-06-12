@@ -5,16 +5,6 @@
 #include "curl/curl.h"
 #include "curlite.hpp"
 
-const bool ExampleMethodGet()
-{
-	return true;
-}
-
-const bool ExampleMethodPost()
-{
-	return true;
-}
-
 const bool DoJsonRequest(
 	const char* url, 
 	const char* body_data, 
@@ -42,7 +32,6 @@ const bool DoJsonRequest(
 	catch (std::exception& e) {
 		std::cerr << "Got an exception: " << e.what() << std::endl;
 	}
-
 
 	return true;
 }

@@ -7,48 +7,6 @@
 
 curly_hpp::performer performer;
 
-void ExampleMethodGet()
-{
-	auto request = curly_hpp::request_builder()
-		.method(curly_hpp::http_method::GET)
-		.url("http://www.httpbin.org/get")
-		.send();
-
-	request.wait();
-
-	if (request.is_done()) 
-	{
-		auto response = request.take();
-		std::cout << "Status code: " << response.http_code() << std::endl;
-	}
-	else 
-	{
-		std::cout << "Error message: " << request.get_error() << std::endl;
-	}
-}
-
-void ExampleMethodPost()
-{
-	auto request = curly_hpp::request_builder()
-		.method(curly_hpp::http_method::POST)
-		.url("http://www.httpbin.org/post")
-		.header("Content-Type", "application/json")
-		.content(R"({"hello" : "world"})")
-		.send();
-
-	request.wait();
-
-	if (request.is_done())
-	{
-		auto response = request.take();
-		std::cout << "Status code: " << response.http_code() << std::endl;
-	}
-	else 
-	{
-		std::cout << "Error message: " << request.get_error() << std::endl;
-	}
-}
-
 void DoJsonRequest(
 	const char* url, 
 	const char* body_data)
@@ -77,8 +35,6 @@ void DoJsonRequest(
 
 int main()
 {
-	ExampleMethodGet();
-	ExampleMethodPost();
 
 	const char* auth_check_url = "http://127.0.0.1:11502/AuthCheck";
 	const char* inapp_check_url = "http://127.0.0.1:11502/InAppCheck";

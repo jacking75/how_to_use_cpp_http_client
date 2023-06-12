@@ -42,8 +42,4 @@
 ![install_05](../Images/Swish/install_05.png)
 
 
-## 라이브러리 설명
-
-
-
 ## 라이브러리 사용하기

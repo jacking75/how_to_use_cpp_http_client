@@ -5,17 +5,13 @@
 #include "curl/curl.h"
 #include "curlcpp/curl_easy.h"
 
-using curl::curl_easy;
-using curl::curl_easy_exception;
-using curl::curlcpp_traceback;
-
 const bool DoJsonRequest(
 	const char* url, 
 	const char* body_data, 
 	const bool isPostMethod = false,
 	const bool isSSL = false)
 {
-	curl_easy easy;
+	curl::curl_easy easy;
 	curl_slist* header = nullptr;
 	header = curl_slist_append(header, "Content-Type: application/json");
 
@@ -32,8 +28,7 @@ const bool DoJsonRequest(
 	try {
 		easy.perform();
 	}
-	catch (curl_easy_exception& error) {
-		// If you want to print the last error.
+	catch (curl::curl_easy_exception& error) {
 		std::cerr << error.what() << std::endl;
 		return false;
 	}
