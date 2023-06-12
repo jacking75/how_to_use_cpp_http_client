@@ -18,8 +18,7 @@ namespace examples
 		std::cout << result->body << std::endl;
 	}
 
-	template <typename T>
-	void SendJsonRequest(const std::string& host, const int port, const std::string& path, const T& body)
+	void SendJsonRequest(const std::string& host, const int port, const std::string& path, const char* body) 
 	{
 		httplib::Headers headers = {
 			{"Content-Type", "application/json"}

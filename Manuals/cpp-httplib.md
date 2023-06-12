@@ -6,6 +6,12 @@
 
 - 해당 문서에서는 `Windows` 환경에서의 설치 방법만 설명한다.
 
+## 라이브러리 특징
+
+- 모든 요청은 동기로 작동한다. (**비동기 지원 X**)
+- 헤더 파일만 있으면 사용 가능하다. (*Header-Only*)
+- 해당 라이브러리로 서버 구현도 가능하다.
+
 ## 라이브러리 설치하기
 
 1. [GitHub](https://github.com/yhirose/cpp-httplib)에서 프로젝트를 다운로드한다.
@@ -41,8 +47,7 @@ void SimpleRequest()
 
 ### 예제2. JSON 송/수신
 ```cpp
-template <typename T>
-void SendJsonRequest(const std::string& host, const int port, const std::string& path, const T& body)
+void SendJsonRequest(const std::string& host, const int port, const std::string& path, const char* body)
 {
 	httplib::Headers headers = {
 		{"Content-Type", "application/json"}
