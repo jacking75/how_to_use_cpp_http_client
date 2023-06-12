@@ -37,28 +37,26 @@
 ![install_05](../Images/curly/install_05.png)
 
 
-## 라이브러리 사용하기
+## 예제 코드
 
-`curly` 라이브러리는 비동기로 진행되기 때문에 `send()` 함수는 송신을 담당하는 스레드인 `performer`의 `Queue`에 Enqeue하는 함수에 불과하다.
+### 필수 참고 항목
 
-따라서 라이브러리를 사용하기 전에 다음과 같이 실제 송신을 담당하는 `performer`를 정의해야하며, 프로그램 실행 중에는 언제나 인스턴스가 유지되고 있어야한다.
+`curly` 라이브러리의 모든 요청 동작은 비동기로 진행된다. 제공되는 `curly_hpp::request_builder` 클래스의 `send()` 함수는 송신 담당 클래스인 `curl::performer` 클래스 내부 `Queue`에 Enqeue하는 함수다.
+
+따라서 라이브러리 사용 시 실제 송신을 담당하는 `curl::performer` 클래스의 인스턴스를 정의 한 후 요청해야하며, 해당 인스턴스는 프로세스 실행 중에 유지되고 있어야한다.
 
 ```cpp
 curly_hpp::performer performer;
 ```
 
-### 예시 함수
+### 예제 1. 간단한 요청
 
 ```cpp
-void DoJsonRequest(
-	const char* url, 
-	const char* body_data)
+void SimpleRequest()
 {
 	auto request = curly_hpp::request_builder()
-		.method(curly_hpp::http_method::POST)
-		.url(url)
-		.header("Content-Type", "application/json")
-		.content(body_data)
+		.method(curly_hpp::http_method::GET)
+		.url("http://example.com")
 		.send();
 
 	request.wait();
@@ -66,6 +64,44 @@ void DoJsonRequest(
 	if (request.is_done())
 	{
 		auto response = request.take();
+
+		std::cout << "Status code: " << response.http_code() << std::endl;
+		std::cout << "Body content: " << response.content.as_string_view() << std::endl;
+		std::cout << "Content Length: " << response.headers["content-length"] << std::endl << std::endl;
+	}
+	else
+	{
+		std::cout << "Error message: " << request.get_error() << std::endl;
+	}
+}
+```
+
+### 예제 2. JSON 송/수신
+```cpp
+void SendRequestJson(const char* url, const char* body, const curly_hpp::http_method method)
+{
+	// 헤더 세팅
+	curly_hpp::header_ilist_t headers = {
+		{"Content-Type", "application/json"}
+	};
+
+	// 요청 정보 세팅 후 바로 송신
+	auto request = curly_hpp::request_builder()
+		.method(method)
+		.url(url)
+		.headers(headers)
+		.content(body)
+		.send();
+
+	// 응답 대기 (내부에서 상태 변수를 락걸고 변경한다.)
+	request.wait();
+
+	// 응답 처리 (내부에서 상태 변수를 락걸고 변경한다. 즉, 락을 획득했다는 건 응답 데이터를 받았다는 뜻이다.)
+	if (request.is_done())
+	{
+		// 응답 데이터를 가져온다.
+		auto response = request.take();
+
 		std::cout << "Status code: " << response.http_code() << std::endl;
 		std::cout << "Body content: " << response.content.as_string_view() << std::endl;
 		std::cout << "Content Length: " << response.headers["content-length"] << std::endl << std::endl;
@@ -81,26 +117,26 @@ void DoJsonRequest(
 ```cpp
 int main()
 {
+	// 송신 담당 인스턴스 선언
+	curly_hpp::performer performer;
+
 	const char* auth_check_url = "http://127.0.0.1:11502/AuthCheck";
 	const char* inapp_check_url = "http://127.0.0.1:11502/InAppCheck";
+	const auto auth_check_body_data = R"(
+		{
+			"AuthID":"test01",
+			"AuthToken":"DUWPQCFN5DQF4P"
+		}
+	)";
 
-	const auto auth_check_body_data =
-		R"(
-			{
-				"AuthID":"test01",
-				"AuthToken":"DUWPQCFN5DQF4P"
-			}
-		)";
+	const auto inapp_check_body_data = R"(
+		{
+			"Receipt":"WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d"
+		}
+	)";
 
-	const auto inapp_check_body_data =
-		R"(
-			{
-				"Receipt":"WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d"
-			}
-		)";
-
-	DoJsonRequest(auth_check_url, auth_check_body_data);
-	DoJsonRequest(inapp_check_url, inapp_check_body_data);
+	examples::SendRequestJson(auth_check_url, auth_check_body_data, curly_hpp::http_method::POST);
+	examples::SendRequestJson(inapp_check_url, inapp_check_body_data, curly_hpp::http_method::POST);
 
 	return 0;
 }
