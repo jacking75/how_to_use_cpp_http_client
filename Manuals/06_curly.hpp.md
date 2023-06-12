@@ -4,6 +4,7 @@
 - 원본 코드 : https://github.com/BlackMATov/curly.hpp
 	- Last Commit : 2023/01/07
 	- Latest Release Version : None
+- 공식 문서 : http://matov.me/curly.hpp
 
 ## 들어가기전에
 
@@ -13,14 +14,10 @@
 
 ## 라이브러리 특징
 
+- `libcurl` 필요
 - **`C++ 17` 이상** 필요.
-- 맞춤 헤더
-- 비동기 요청
-- 다양한 유형의 타임아웃
-- URL 인코딩 쿼리 매개변수
-- 완료 및 진행 콜백
-- 사용자 지정 업로드 및 다운로드 스트림
-- PUT, GET, HEAD, POST, PATCH, DELETE, OPTIONS 메서드
+- 모든 요청은 **비동기로 동작** (*응답 대기 불필요, 여러 번 요청 가능*)
+- 응답 데이터는 콜백 함수로 핸들링
 
 ## 라이브러리 설치하기
 
