@@ -1,7 +1,5 @@
 #include <string>
 #include <iostream>
-#include <cstring>
-
 #include "curl/curl.h"
 #include "curly.hpp"
 
@@ -67,6 +65,15 @@ namespace examples
 	}
 }
 
+void Worker(const char* url, const char* body, const curly_hpp::http_method method)
+{
+	for (int i = 0; i < 100; i++)
+	{
+		examples::SendRequestJson(url, body, method);
+		Sleep(1);
+	}
+}
+
 int main()
 {
 	// 송신 담당 인스턴스 선언
@@ -87,8 +94,26 @@ int main()
 		}
 	)";
 
+	// 싱글 스레드로 보내기
 	examples::SendRequestJson(auth_check_url, auth_check_body_data, curly_hpp::http_method::POST);
 	examples::SendRequestJson(inapp_check_url, inapp_check_body_data, curly_hpp::http_method::POST);
+
+	// 멀티 스레드로 보내기
+	std::vector<std::thread> workers;
+	for (int i = 0; i < 5; i++)
+	{
+		workers.push_back(std::thread(Worker, auth_check_url, auth_check_body_data, curly_hpp::http_method::POST));
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		workers.push_back(std::thread(Worker, inapp_check_url, inapp_check_body_data, curly_hpp::http_method::POST));
+	}
+
+	for (int i = 0; i < workers.size(); i++)
+	{
+		workers[i].join();
+	}
 
 	return 0;
 }

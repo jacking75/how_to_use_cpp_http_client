@@ -8,6 +8,12 @@
 
 - 해당 문서에서 설명할 `curly.hpp` 라이브러리는 [libcurl](https://github.com/curl/curl)을 `C++`로 랩핑한 라이브러리다. 따라서 `curly.hpp` 라이브러리를 적용하고자 하는 프로젝트에는 `libcurl` 라이브러리가 설치되어 있어야한다. ([`libcurl` 설치 방법](~/Manuals/libcurl.md))
 
+## 라이브러리 특징
+
+- 모든 요청이 비동기로 진행된다.
+
+- 멀티스레드로 요청 송신 및 응답 수신이 가능하다.
+
 ## 라이브러리 설치하기
 
 1. [GitHub](https://github.com/BlackMATov/curly.hpp)에서 프로젝트를 다운로드한다.
@@ -115,6 +121,20 @@ void SendRequestJson(const char* url, const char* body, const curly_hpp::http_me
 
 ### 사용 예시
 ```cpp
+#include <string>
+#include <iostream>
+#include "curl/curl.h"
+#include "curly.hpp"
+
+void Worker(const char* url, const char* body, const curly_hpp::http_method method)
+{
+	for (int i = 0; i < 100; i++)
+	{
+		examples::SendRequestJson(url, body, method);
+		Sleep(1);
+	}
+}
+
 int main()
 {
 	// 송신 담당 인스턴스 선언
@@ -135,9 +155,25 @@ int main()
 		}
 	)";
 
+	// 싱글 스레드로 보내기
 	examples::SendRequestJson(auth_check_url, auth_check_body_data, curly_hpp::http_method::POST);
 	examples::SendRequestJson(inapp_check_url, inapp_check_body_data, curly_hpp::http_method::POST);
 
-	return 0;
+	// 멀티 스레드로 보내기
+	std::vector<std::thread> workers;
+	for (int i = 0; i < 5; i++)
+	{
+		workers.push_back(std::thread(Worker, auth_check_url, auth_check_body_data, curly_hpp::http_method::POST));
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		workers.push_back(std::thread(Worker, inapp_check_url, inapp_check_body_data, curly_hpp::http_method::POST));
+	}
+
+	for (int i = 0; i < workers.size(); i++)
+	{
+		workers[i].join();
+	}
 }
 ```
