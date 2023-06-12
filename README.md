@@ -55,46 +55,48 @@ Content-Type: application/json
 
 `AuthCheck` API에 사용할 수 있는 `AuthID`와 `AuthToken` 목록은 다음과 같다.
 
-|  AuthID   |  AuthToken  |
-| -- | -- |
-| `test01` | `DUWPQCFN5DQF4P` |
-| `test02` | `DYG5R07M7RUV07` |
-| `test03` | `5GZF7OFY05P4TT` |
-| `test04` | `94ILRSD4LRXE6N` |
-| `test05` | `GPKJ442KR1BK0U` |
-| `test06` | `P2H95LNF6NT8UC` |
-| `test07` | `JXOU845OYZJUXG` |
-| `test08` | `N21SK6AXKQWS5B` |
-| `test09` | `X7S4WCTKMY6YVK` |
-| `test10` | `HIB0KU1A6FGVT1` |
-| `test11` | `0HM20Q8A4GFCBX` |
-| `test12` | `9IPHAAF6P88BMP` |
-| `test13` | `D58RFSAAAP1RWG` |
-| `test14` | `MYQOR56M574OIG` |
-| `test15` | `M0A7BOS0CVVN5L` |
-| `test16` | `0KJLTAMCVQBRLX` |
-| `test17` | `1E4XH0PL1XRGI8` |
-| `test18` | `FK4K9SYSB63L7R` |
+| | AuthID | AuthToken  |
+| | -- | -- |
+| | `test01` | `DUWPQCFN5DQF4P` |
+| | `test02` | `DYG5R07M7RUV07` |
+| | `test03` | `5GZF7OFY05P4TT` |
+| | `test04` | `94ILRSD4LRXE6N` |
+| | `test05` | `GPKJ442KR1BK0U` |
+| | `test06` | `P2H95LNF6NT8UC` |
+| | `test07` | `JXOU845OYZJUXG` |
+| | `test08` | `N21SK6AXKQWS5B` |
+| | `test09` | `X7S4WCTKMY6YVK` |
+| | `test10` | `HIB0KU1A6FGVT1` |
+| | `test11` | `0HM20Q8A4GFCBX` |
+| | `test12` | `9IPHAAF6P88BMP` |
+| | `test13` | `D58RFSAAAP1RWG` |
+| | `test14` | `MYQOR56M574OIG` |
+| | `test15` | `M0A7BOS0CVVN5L` |
+| | `test16` | `0KJLTAMCVQBRLX` |
+| | `test17` | `1E4XH0PL1XRGI8` |
+| | `test18` | `FK4K9SYSB63L7R` |
 
 `InAppCheck` 요청에 사용할 수 있는 것은 `Receipt` 목록은 다음과 같다.
-|  Receipt   |
-| -- |
-|`QKsM2oPCeUiLWlwpTqXN5fIr4w0I7gMEB73573W8hGIn0WU9bQjNnxA7nQxhcvMP"`|
-|`WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d"`|
-|`1OjwHKctOp29VE1KLK75BbXYxKpTHufOOAwcCWo32xFAvthQdyX2UaOECIxIl802"`|
-|`NuIDV687iXasG5wFuTQbtpiAHBVbAjwfpI5dMUHfw76PBipS7cheFc0SksK6R2Gn"`|
-|`FSrhNe0gbFAKjjY7ZN6FPK1ImWHsQrsyMnyWqR14JntyLofloticXJ7oFVUpSLBd"`|
-|`KEUqnainhuHKThpCxXnT7vGr0tMQ6IEL3pu764kkGUNTtdhAxcT2umID0LmVNi7K"`|
-|`Cmu2JCJsVndrsCpFMg520SAY9nrwVSSFIQor4FXJpaRk4VXpNtsNwa2Yc9gIbLuH"`|
-|`7IJi2nTCMVZ5HbE3KF8cUJ73Uw7f84aQhMMatjf21ZxajeBMffQePfN89uROSB5n"`|
-|`gXIoGpNMkWcO74FQPlSNvUhUqmGp7kXvh5bZHCJCDr7ePXfkyyJTrwFBGYO5qr8b"`|
-|`wglqUxLmKZjr3L6xUwrOT0ijNKqFY9PwDA4f143vUKB6rP4Sd1iScPakuRP0LMF2"`|
-|`AFwoseSvylxeyhvssAtLKRUBrq71wXgW5Lrp62IOPYon8U1sNJGC5iMuLpt8yWPZ"`|
-|`XbRd1nN5ct0IKWNHiULeuxhnLOfhuqHs5vOvRCKVPh0cSQrZk9Dy8q6atVkY3Bg6"`|
-|`lOkJrV8drexk1aAsLrphZijejTYruYGnjXe0G6r27iJiKhJxFTi1Hc3RYhQ5m7hq"`|
-|`dk8IbTxH1Kgn9GFqA8VV0EqEDFUI2P5aXAEmf2nhMJsmNO86IgLSwVgNEGpXHxWg"`|
-|`YOMGwAkbASNEgMibM63w4PTVKa43cHmv6rfdvHGaZjdU19f5iIE9y1EiXUyALO0R"`|
-|`aepIhSInxFk68yvdk66cwfskjti6sBKTqPBHo6vdI5J664EpOVBYN4lwqk89n1YJ"`|
+
+
+| | Receipt   |
+| | -- |
+| | `QKsM2oPCeUiLWlwpTqXN5fIr4w0I7gMEB73573W8hGIn0WU9bQjNnxA7nQxhcvMP`|
+| | `WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d`|
+| | `1OjwHKctOp29VE1KLK75BbXYxKpTHufOOAwcCWo32xFAvthQdyX2UaOECIxIl802`|
+| | `NuIDV687iXasG5wFuTQbtpiAHBVbAjwfpI5dMUHfw76PBipS7cheFc0SksK6R2Gn`|
+| | `FSrhNe0gbFAKjjY7ZN6FPK1ImWHsQrsyMnyWqR14JntyLofloticXJ7oFVUpSLBd`|
+| | `KEUqnainhuHKThpCxXnT7vGr0tMQ6IEL3pu764kkGUNTtdhAxcT2umID0LmVNi7K`|
+| | `Cmu2JCJsVndrsCpFMg520SAY9nrwVSSFIQor4FXJpaRk4VXpNtsNwa2Yc9gIbLuH`|
+| | `7IJi2nTCMVZ5HbE3KF8cUJ73Uw7f84aQhMMatjf21ZxajeBMffQePfN89uROSB5n`|
+| | `gXIoGpNMkWcO74FQPlSNvUhUqmGp7kXvh5bZHCJCDr7ePXfkyyJTrwFBGYO5qr8b`|
+| | `wglqUxLmKZjr3L6xUwrOT0ijNKqFY9PwDA4f143vUKB6rP4Sd1iScPakuRP0LMF2`|
+| | `AFwoseSvylxeyhvssAtLKRUBrq71wXgW5Lrp62IOPYon8U1sNJGC5iMuLpt8yWPZ`|
+| | `XbRd1nN5ct0IKWNHiULeuxhnLOfhuqHs5vOvRCKVPh0cSQrZk9Dy8q6atVkY3Bg6`|
+| | `lOkJrV8drexk1aAsLrphZijejTYruYGnjXe0G6r27iJiKhJxFTi1Hc3RYhQ5m7hq`|
+| | `dk8IbTxH1Kgn9GFqA8VV0EqEDFUI2P5aXAEmf2nhMJsmNO86IgLSwVgNEGpXHxWg`|
+| | `YOMGwAkbASNEgMibM63w4PTVKa43cHmv6rfdvHGaZjdU19f5iIE9y1EiXUyALO0R`|
+| | `aepIhSInxFk68yvdk66cwfskjti6sBKTqPBHo6vdI5J664EpOVBYN4lwqk89n1YJ`|
 
 # `C++ HTTP` 라이브러리 목록
   
