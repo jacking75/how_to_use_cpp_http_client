@@ -35,7 +35,6 @@ void DoJsonRequest(
 
 int main()
 {
-
 	const char* auth_check_url = "http://127.0.0.1:11502/AuthCheck";
 	const char* inapp_check_url = "http://127.0.0.1:11502/InAppCheck";
 

@@ -165,34 +165,12 @@ void Init()
 - 해당 라이브러리로 서버도 구현 가능.
 - **`C++ 11` 이상** 필요.
 - 내부에서 `Blocking Socket`을 사용하므로, **비동기 요청 기능은 지원하지 않는다.**
-
-```c
-#include <httplib.h>
-#include <iostream>
-
-int main() {
-
-  httplib::Headers headers = {{"Content-Type", "application/json"}};
-  std::string body = R"({"AuthID":"test01","AuthToken":"DUWPQCFN5DQF4P"})";
-  httplib::Client cli("127.0.0.1", 11502);
-
-  if (auto res = cli.Post("/AuthCheck", headers, body, "application/json")) {
-    std::cout << res->status << std::endl;
-    std::cout << res->get_header_value("Content-Type") << std::endl;
-    std::cout << res->body << std::endl;
-  } else {
-    std::cout << "error code: " << res.error() << std::endl;
-  }
-
-  return 0;
-}
-```
   
-## malloy (`boost` 설치 필요) 
+## malloy (`boost` 설치 필요) (TODO)
 - [GitHub](https://github.com/tectu/malloy )
 - Malloy is a small, embeddable HTTP & WebSocket server & client built on top of boost.
 - Windows (with both MSVC and MinGW), Linux (Ubuntu, Debian, Fedora, ...), MacOS, FreeBSD
    
-## EasyHttp (`POCO` 설치 필요) 
+## EasyHttp (`POCO` 설치 필요) (TODO)
 - [GitHub](https://github.com/sony/easyhttpcpp )
 - A cross-platform HTTP client library with a focus on usability and speed.

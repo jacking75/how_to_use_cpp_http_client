@@ -18,18 +18,19 @@
 
 ![install_03](../Images/cpp-httplib/install_03.png)
 
-## 라이브러리 사용하기
-
+## 예제 코드
 ```cpp
 #include <iostream>
 #include "httplib.h"
 
 int main() 
 {
+	// 헤더 세팅
 	httplib::Headers headers = { 
 		{"Content-Type", "application/json"} 
 	};
 
+	// 보낼 데이터
 	std::string body = R"(
 		{
 			"AuthID":"test01",
@@ -37,6 +38,7 @@ int main()
 		}
 	)";
 
+	// 클라이언트 
 	httplib::Client cli("127.0.0.1", 11502);
 	if (auto res = cli.Post("/AuthCheck", headers, body, "application/json"))
 	{
