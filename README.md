@@ -56,7 +56,7 @@ Content-Type: application/json
 `AuthCheck` API에 사용할 수 있는 `AuthID`와 `AuthToken` 목록은 다음과 같다.
 
 | | AuthID | AuthToken  |
-| | -- | -- |
+| -- | -- | -- |
 | | `test01` | `DUWPQCFN5DQF4P` |
 | | `test02` | `DYG5R07M7RUV07` |
 | | `test03` | `5GZF7OFY05P4TT` |
@@ -80,7 +80,7 @@ Content-Type: application/json
 
 
 | | Receipt   |
-| | -- |
+| -- | -- |
 | | `QKsM2oPCeUiLWlwpTqXN5fIr4w0I7gMEB73573W8hGIn0WU9bQjNnxA7nQxhcvMP`|
 | | `WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d`|
 | | `1OjwHKctOp29VE1KLK75BbXYxKpTHufOOAwcCWo32xFAvthQdyX2UaOECIxIl802`|
