@@ -19,36 +19,72 @@
 ![install_03](../Images/cpp-httplib/install_03.png)
 
 ## 예제 코드
+
+### 예제1. 간단한 요청
+
+```cpp
+void SimpleRequest()
+{
+	httplib::Client connection("example.com", 80);
+	httplib::Result result = connection.Post("/");
+
+	if (result == nullptr)
+	{
+		std::cout << "error code: " << result.error() << std::endl;
+		return;
+	}
+
+	std::cout << result->status << std::endl;
+	std::cout << result->body << std::endl;
+}
+```
+
+### 예제2. JSON 송/수신
+```cpp
+template <typename T>
+void SendJsonRequest(const std::string& host, const int port, const std::string& path, const T& body)
+{
+	httplib::Headers headers = {
+		{"Content-Type", "application/json"}
+	};
+
+	httplib::Client connection(host, port);
+	httplib::Result result = connection.Post(path, headers, body, "application/json");
+
+	if (result == nullptr)
+	{
+		std::cout << "error code: " << result.error() << std::endl;
+		return;
+	}
+
+	std::cout << result->status << std::endl;
+	std::cout << result->body << std::endl;
+}
+```
+
+### 사용 예시
 ```cpp
 #include <iostream>
 #include "httplib.h"
 
 int main() 
 {
-	// 헤더 세팅
-	httplib::Headers headers = { 
-		{"Content-Type", "application/json"} 
-	};
-
-	// 보낼 데이터
-	std::string body = R"(
+	const auto auth_check_body = R"(
 		{
 			"AuthID":"test01",
 			"AuthToken":"DUWPQCFN5DQF4P"
 		}
 	)";
 
-	// 클라이언트 
-	httplib::Client cli("127.0.0.1", 11502);
-	if (auto res = cli.Post("/AuthCheck", headers, body, "application/json"))
-	{
-		std::cout << res->status << std::endl;
-		std::cout << res->body << std::endl;
-	}
-	else 
-	{
-		std::cout << "error code: " << res.error() << std::endl;
-	}
+	const auto inapp_check_body_data = R"(
+		{
+			"Receipt":"WkuOATWDQ909OET9cBjVEXEgI3KqTTbThNFe206bywlkSBiUD1hgrCltj3g1a84d"
+		}
+	)";
+
+	examples::SimpleRequest();
+	examples::SendJsonRequest("127.0.0.1", 11502, "/AuthCheck", auth_check_body);
+	examples::SendJsonRequest("127.0.0.1", 11502, "/InAppCheck", inapp_check_body_data);
 
 	return 0;
 }
