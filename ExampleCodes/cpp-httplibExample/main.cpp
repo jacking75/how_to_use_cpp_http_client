@@ -59,30 +59,3 @@ int main()
 
 	return 0;
 }
-
-
-
-
-
-
-
-| | AuthID | AuthToken  |
-| | -- | -- |
-| | `test01` | `DUWPQCFN5DQF4P` |
-| | `test02` | `DYG5R07M7RUV07` |
-| | `test03` | `5GZF7OFY05P4TT` |
-| | `test04` | `94ILRSD4LRXE6N` |
-| | `test05` | `GPKJ442KR1BK0U` |
-| | `test06` | `P2H95LNF6NT8UC` |
-| | `test07` | `JXOU845OYZJUXG` |
-| | `test08` | `N21SK6AXKQWS5B` |
-| | `test09` | `X7S4WCTKMY6YVK` |
-| | `test10` | `HIB0KU1A6FGVT1` |
-| | `test11` | `0HM20Q8A4GFCBX` |
-| | `test12` | `9IPHAAF6P88BMP` |
-| | `test13` | `D58RFSAAAP1RWG` |
-| | `test14` | `MYQOR56M574OIG` |
-| | `test15` | `M0A7BOS0CVVN5L` |
-| | `test16` | `0KJLTAMCVQBRLX` |
-| | `test17` | `1E4XH0PL1XRGI8` |
-| | `test18` | `FK4K9SYSB63L7R` |
