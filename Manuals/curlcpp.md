@@ -133,7 +133,7 @@ void GetSessionInfos()
 ```cpp
 void StoreResponseDataFromFile(const std::string& path)
 {
-	std::ofstream file;
+	std::ofstream file;	// 응답데이터 저장할 파일 핸들러
 	file.open(path);
 
 	curl::curl_ios<std::ostream> writer(file);
@@ -160,7 +160,7 @@ void StoreResponseDataFromFile(const std::string& path)
 ```cpp
 void StoreResponseDataFromMemory()
 {
-	std::ostringstream mem;
+	std::ostringstream mem;	// 응답 데이터 저장할 메모리
 
 	curl::curl_ios<std::ostream> writer(mem);
 	curl::curl_easy handle(writer);
@@ -245,7 +245,7 @@ const bool SendRequestJson(const char* url, const char* body)
 
 	handle.add<CURLOPT_URL>(url);
 	handle.add<CURLOPT_POST>(1L);
-	handle.add<CURLOPT_HTTPHEADER>(header);
+	handle.add<CURLOPT_HTTPHEADER>(header);	// 헤더 세팅
 	handle.add<CURLOPT_POSTFIELDS>(body);
 	handle.add<CURLOPT_POSTFIELDSIZE>(doby_len);
 
