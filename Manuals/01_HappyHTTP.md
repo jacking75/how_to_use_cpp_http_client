@@ -1,10 +1,23 @@
-# `HappyHTTP` 사용법
+# HappyHTTP
 
-예제 코드 : `~/ExampleCodes/HappyHTTPExample`
+- 예제 코드 : `~/ExampleCodes/HappyHTTPExample`
+- 원본 코드 : https://github.com/mingodad/HappyHTTP
+	- Last Commit : 2013/07/27
+	- Latest Release Version : 0.1
 
 ## 들어가기전에
 
-해당 문서의 예제 코드(`~/ExampleCodes/HappyHTTPExample`)에서 사용되는 라이브러리 소스 코드는 원본 코드 빌드 시 발생하는 다양한 컴파일 오류와 에러 사항들을 수정한 코드이며, 실제 원본이 필요한 경우 [이곳](https://github.com/mingodad/HappyHTTP)을 참고한다.
+해당 문서의 예제 코드(`~/ExampleCodes/HappyHTTPExample`)에서 사용되는 라이브러리 코드는 **원본 빌드 시 발생하는 컴파일 오류 및 에러 사항을 수정한 코드**다.
+
+## 라이브러리 특징
+
+- 직관적인 API
+- 크로스 플랫폼 (`Windows`, `Linux`, `OSX`) 지원
+- 다른 라이브러리 **종속성 없음**
+- 모든 요청은 **비동기로 동작** (*응답 대기 불필요, 여러 번 요청 가능*)
+- 응답 데이터는 **Folling** 방식으로 수신.
+- 응답 데이터는 콜백 함수로 핸들링
+
 
 ## 라이브러리 설치하기
 
@@ -12,34 +25,50 @@
 
 ![install](../Images/HappyHTTP/install_01.png)
 
-2. 소스 코드를 자신의 프로젝트에 포함시킨다. (*그림에서의 솔루션 이름이 `HappyHTTPExample`이지만, 실제로는 `HappyHTTP` 라이브러리를 사용하는 별도의 프로젝트라고 가정한다.*)
+2. 복사한 소스 코드를 프로젝트에 포함시킨다.
 
 ![install](../Images/HappyHTTP/install_02.png)
 
 ## 라이브러리 사용하기
 
-가장 먼저 `WSAStartup()` 함수를 호출하여 `WinSock`을 초기화를 해야한다.
+### 0. `winsock` 초기화
+
+`HappyHTTP`는 `winsock` 기반의 라이브러리이며, 라이브러리 기능 사용 전에 `winsock`을 초기화 해야한다.
+
 ```cpp
-bool NetInit()
+WSAData wsaData;
+int32_t errcode = WSAStartup(MAKEWORD(2, 2), &wsaData);
+if (errcode != NO_ERROR)
 {
-	WSAData wsaData;
-	int32_t errcode = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (errcode != NO_ERROR)
+	std::cout << "WSAStartup failed with error: " << errcode << std::endl;
+	return false;
+}
+return true;
+```
+
+### 1. Folling 함수 선언 및 정의
+
+- 요청 패킷 송신 후 응답 데이터 수신을 위해 다음과 같이 `outstanding()` 함수와 `pump()` 함수를 호출한다.
+
+```cpp
+void ReceiveResponseData(happyhttp::Connection* p_conn)
+{
+	while (p_conn->outstanding()) // 응답 데이터가 남아있는가?
 	{
-		std::cout << "WSAStartup failed with error: " << errcode << std::endl;
-		return false;
+		// 응답 데이터를 계속 수신한다.
+		p_conn->pump();
 	}
-	return true;
 }
 ```
 
-이후 응답 데이터에 대한 각각의 콜백 함수를 선언 및 정의한다.
+### 2. 응답 데이터 콜백 함수 선언 및 정의
 
-### `OnBegin`
-- 응답 데이터 수신 시 **한 번 호출**된다.
-- 매개 변수로 받은 `happyhttp::Response*`를 통해 응답 상태를 확인할 수 있다.
+#### `OnBegin`
 
-#### 예제 코드
+- 응답 데이터 수신 시 **한 번 호출**
+- 매개 변수 `happyhttp::Response*`를 통해 응답 상태 확인 가능.
+
+##### 예제 코드 
 ```cpp
 void OnBegin(const happyhttp::Response* response, void* userData)
 {
@@ -48,12 +77,12 @@ void OnBegin(const happyhttp::Response* response, void* userData)
 }
 ```
 
-### `OnData`
-- 응답 데이터 수신을 위한 **Folling 중 (*아래 설명*) 여러 번 호출**된다.
-- 매개 변수로 받은 `happyhttp::Response*`를 통해 응답 상태를 확인할 수 있다.
-- 매개 변수로 받은 `responseData`와 `responseDataLength`로 수신 받은 데이터에 접근 가능하다.
+#### `OnData`
+- 응답 데이터 수신을 위한 **Folling 중 (*아래 설명*) 여러 번 호출**
+- 매개 변수 `happyhttp::Response*`를 통해 응답 상태 확인 가능.
+- 매개 변수 `responseData`와 `responseDataLength`로 응답 데이터 접근 가능
 
-#### 예제 코드
+##### 예제 코드
 ```cpp
 void OnData(const happyhttp::Response* response, void* userData, const unsigned char* responseData, int responseDataLength)
 {
@@ -62,11 +91,10 @@ void OnData(const happyhttp::Response* response, void* userData, const unsigned 
 }
 ```
 
-### `OnComplete`
-- 모든 응답 데이터를 수신했을 경우 **한 번 호출**된다.
-- Folling이 종료된다.
+#### `OnComplete`
+- 모든 응답 데이터 수신 시 **한 번 호출**
 
-#### 예제 코드
+## 예제 코드
 ```cpp
 void OnComplete(const happyhttp::Response* response, void* userData)
 {
@@ -75,20 +103,7 @@ void OnComplete(const happyhttp::Response* response, void* userData)
 }
 ```
 
-### Folling 설명
-- 요청 패킷 송신 후 응답 데이터를 수신 받기 위해 다음과 같이 `outstanding()` 함수와 `pump()` 함수를 통해 Folling한다.
-```cpp
-void ReceiveResponseData(happyhttp::Connection* p_conn)
-{
-	while (p_conn->outstanding())	// 응답 데이터가 남아있는가?
-	{
-		// 응답 데이터를 계속 수신한다.
-		p_conn->pump();
-	}
-}
-```
-
-### 예제 1. METHOD : GET
+### 예제 1. 간단한 GET 요청
 ```cpp
 void ExampleMethodGet()
 {
@@ -116,7 +131,7 @@ void ExampleMethodGet()
 }
 ```
 
-### 예제 2. METHOD : POST
+### 예제 2. 간단한 POST 요청
 ```cpp
 void ExampleMethodPost()
 {
@@ -152,7 +167,7 @@ void ExampleMethodPost()
 }
 ```
 
-### 예제 3. METHOD : POST (Low-Level Interface)
+### 예제 3. 간단한 POST 요청 (Low-Level Interface)
 ```cpp
 void ExampleMethodPostLowLevelInterface()
 {
@@ -184,8 +199,7 @@ void ExampleMethodPostLowLevelInterface()
 }
 ```
 
-### 예제 4. JSON Request
-- BodyData를 `JSON`으로 송신하고 싶은 경우 다음과 같이 사용할 수 있다.
+### 예제 4. JSON 송/수신
 ```cpp
 bool DoJsonRequest (
 	const char* host, 
@@ -225,7 +239,7 @@ bool DoJsonRequest (
 }
 ```
 
-#### 실제 사용 예시
+### 사용 예시
 ```cpp
 int main()
 {

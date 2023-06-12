@@ -1,10 +1,20 @@
 # `libcurl` 사용법
 
-- 예제 코드 경로 : `ExampleCodes/libcurlExample`
+- 예제 코드 : `ExampleCodes/libcurlExample`
+- 원본 코드 : https://github.com/curl/curl
+	- Last Commit : 2023/06/12
+	- Latest Release Version : 8.1.2
 
 ## 들어가기전에
 
 - 해당 문서에서는 `Windows` 환경에서의 설치 방법만 설명한다.
+
+## 라이브러리 특징
+
+- **가장 오래되고 안정**된 데이터 전송 프로그램 (*CLI Tool*)
+- 다양한 네트워크 기능 지원
+- 응답 데이터는 콜백 함수로 핸들링 (*콜백 함수 미지정 시 `stdout`에 자동 출력*)
+- 응답 데이터를 메모리 또는 파일로 저장할 수 있음.
 
 ## 라이브러리 설치하기
 
@@ -34,9 +44,9 @@
 
 ![install_06](../Images/libcurl/install_06.png)
 
-### 내 프로젝트로 라이브러리 Import하기
+### 라이브러리 적용하기
 
-- (*참고사항*) 예제 파일에서는 프로젝트 내부에 `thirdparty`라는 별도의 폴더를 생성하여 다음과 같이 라이브러리 파일들을 관리하고 있다.
+- (*참고*) 예제 파일(`ExampleCodes/libcurlExample`) 내부에 `thirdparty`라는 별도의 폴더를 생성하여 라이브러리를 관리중이다.
 
 ![import_ex_thirdparty_01](../Images/libcurl/import_ex_thirdparty_01.png)
 
@@ -60,36 +70,21 @@
 
 ![import_04_02](../Images/libcurl/import_04_02.png)
 
-#### 정적 라이브러리 (`.lib`)로 Import하기
+#### 정적 라이브러리로 적용하는 방법
 
- 정적 라이브러리로 사용하기 위해서는 몇 가지 추가적인 설정을 진행해야 한다.
+프로젝트에서 정적 라이브러리로 사용하기 위해서는 몇 가지 추가 설정 해야한다.
 
 1. 전처리기 추가
 
 ![static_01](../Images/libcurl/static_01.png)
 
-2. 라이브러리 추가
+2. 종속 라이브러리 추가
 
 ![static_02](../Images/libcurl/static_02.png)
 
-## 라이브러리 사용하기
+## 예제 코드 
 
-가장 먼저 응답 데이터 수신 후 호출될 콜백 함수를 선언 및 정의한다.
-
-### `Callback Function` 예제
-
-```cpp
-size_t OnResponse(char* ptr, size_t size, size_t nmemb, std::string* stream)
-{
-	int realsize = size * nmemb;
-
-	std::cout << ptr << std::endl;
-
-	return realsize;
-}
-```
-
-### 예제 1. METHOD : GET
+### 예제 1. 간단한 GET 요청
 
 ```cpp
 const bool ExampleMethodGet()
@@ -126,7 +121,7 @@ const bool ExampleMethodGet()
 }
 ```
 
-### 예제 2. METHOD : POST
+### 예제 2. 간단한 POST 요청
 
 ```cpp
 const bool ExampleMethodPost()
@@ -176,8 +171,17 @@ const bool ExampleMethodPost()
 }
 ```
 
-### 예제 3. JSON Request
+### 예제 3. JSON 송/수신
 ```cpp
+size_t OnResponse(char* ptr, size_t size, size_t nmemb, std::string* stream)
+{
+	int realsize = size * nmemb;
+
+	std::cout << ptr << std::endl;
+
+	return realsize;
+}
+
 const bool DoJsonRequest(
 	const char* url, 
 	const char* body_data, 
@@ -213,8 +217,8 @@ const bool DoJsonRequest(
 	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body_data);
 	curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body_data_len);
 
-	// CALLBACK
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, OnResponse);
+	// CALLBACK 함수 등록
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, OnResponse); 
 
 	// SEND
 	CURLcode res = curl_easy_perform(curl);
@@ -233,7 +237,7 @@ const bool DoJsonRequest(
 }
 ```
 
-#### 실제 사용 예시
+### 사용 예시
 ```cpp
 int main()
 {

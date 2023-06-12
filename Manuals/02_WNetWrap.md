@@ -1,10 +1,24 @@
-# `WNetWrap` 사용법
+# WNetWrap
 
-예제 코드 : `~/ExampleCodes/WNetWrapExample`
+- 예제 코드 : `~/ExampleCodes/WNetWrapExample`
+- 원본 코드 : https://github.com/hack-tramp/WNetWrap
+	- Last Commit : 2021/07/7
+	- Latest Release Version : 1.0.3
 
 ## 들어가기전에
 
-해당 문서의 예제 코드(`~/ExampleCodes/WNetWrapExample`)에서 사용되는 라이브러리 소스 코드는 원본 코드 빌드 시 발생하는 다양한 컴파일 오류와 에러 사항들을 수정한 코드이며, 실제 원본이 필요한 경우 [이곳](https://github.com/hack-tramp/WNetWrap)을 참고한다.
+해당 문서의 예제 코드(`~/ExampleCodes/WNetWrapExample`)에서 사용되는 라이브러리 코드는 **원본 빌드 시 발생하는 컴파일 오류 및 에러 사항을 수정한 코드**다.
+
+### 주의 사항
+- **Memory Leak 존재**
+- **멀티스레드로 사용 불가능**
+- Timeout 기능 사용 시 Thread 생성됨.
+
+## 라이브러리 특징
+- [WinINet](https://learn.microsoft.com/en-us/windows/win32/wininet/about-wininet) API로 개발
+- `Windows`만 지원
+- 다른 라이브러리 **종속성 없음**
+- 현재 구현된 기능
 
 ## 라이브러리 설치하기
 
@@ -12,25 +26,25 @@
 
 ![install](../Images/WNetWrap/install_01.png)
 
-2. 해당 소스 코드를 자신의 프로젝트에 포함시킨다. (*그림에서의 솔루션 이름이 `WNetWrapExample`이지만, 실제로는 `WNetWrap` 라이브러리를 사용하는 별도의 프로젝트라고 가정한다.*)
+2. 복사한 소스 코드를 프로젝트에 포함시킨다.
 
 ![install](../Images/WNetWrap/install_02.png)
 
-3. 자신의 프로젝트에서 `C++` 버전을 변경한다. (**최소 C++17 이상**의 버전이 필요하다.)
+3. `C++` 버전 변경 (**C++14 이상**)
 
 ![install](../Images/WNetWrap/install_03.png)
 
-4. 자신의 프로젝트에서 `SDL 검사`를 OFF한다.
+4. `SDL 검사` OFF
 
 ![install](../Images/WNetWrap/install_04.png)
 
-5. 자신의 프로젝트에서 라이브러리를 `#include`한다.
+5. 라이브러리 헤더 파일 include
 
 ![install](../Images/WNetWrap/install_05.png)
 
 ## 라이브러리 사용하기
 
-### 예제 1. METHOD : GET
+### 예제 1. 간단한 GET 요청
 ```cpp
 void ExampleMethodGet()
 {
@@ -43,7 +57,7 @@ void ExampleMethodGet()
 }
 ```
 
-### 예제 2. METHOD : POST
+### 예제 2. 간단한 POST 요청
 ```cpp
 void ExampleMethodPost()
 {
@@ -60,7 +74,7 @@ void ExampleMethodPost()
 }
 ```
 
-### 예제 3. JSON Request
+### 예제 3. JSON 송/수신
 ```cpp
 // METHOD: GET
 void DoJsonRequestMethodGet(const char* url, const char* body_data)
@@ -98,7 +112,7 @@ void DoJsonRequestMethodPost(const char* url, const char* body_data)
 }
 ```
 
-#### 실제 사용 예시
+#### 사용 예시
 
 ```cpp
 int main()

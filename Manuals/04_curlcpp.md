@@ -1,12 +1,22 @@
-# `curlcpp` 사용법
+# curlcpp
 
-- 예제 코드 경로 : `ExampleCodes/curlcppExample`
+- 예제 코드 : `~/ExampleCodes/curlcppExample`
+- 원본 코드 : https://github.com/JosephP91/curlcpp
+	- Last Commit : 2023/04/25
+	- Latest Release Version : 3.1
+- 공식 문서 : https://josephp91.github.io/curlcpp
 
 ## 들어가기전에
 
 - 해당 문서에서는 `Windows` 환경에서의 설치 방법만 설명한다.
 
 - 해당 문서에서 설명할 `curlcpp` 라이브러리는 [libcurl](https://github.com/curl/curl)을 `C++`로 랩핑한 라이브러리다. 따라서 `curlcpp` 라이브러리를 적용하고자 하는 프로젝트에는 `libcurl` 라이브러리가 설치되어 있어야한다. ([`libcurl` 설치 방법](~/Manuals/libcurl.md))
+
+
+## 라이브러리 특징
+
+- `libcurl`의 **C++ 버전**
+- `libcurl` 필요
 
 ## 라이브러리 설치하기
 

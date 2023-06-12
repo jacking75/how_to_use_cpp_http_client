@@ -1,6 +1,9 @@
-# `curly.hpp` 사용법
+# curly.hpp
 
-- 예제 코드 경로 : `ExampleCodes/curlyExample`
+- 예제 코드 : `ExampleCodes/curlyExample`
+- 원본 코드 : https://github.com/BlackMATov/curly.hpp
+	- Last Commit : 2023/01/07
+	- Latest Release Version : None
 
 ## 들어가기전에
 
@@ -10,9 +13,14 @@
 
 ## 라이브러리 특징
 
-- 모든 요청이 비동기로 진행된다.
-
-- 멀티스레드로 요청 송신 및 응답 수신이 가능하다.
+- **`C++ 17` 이상** 필요.
+- 맞춤 헤더
+- 비동기 요청
+- 다양한 유형의 타임아웃
+- URL 인코딩 쿼리 매개변수
+- 완료 및 진행 콜백
+- 사용자 지정 업로드 및 다운로드 스트림
+- PUT, GET, HEAD, POST, PATCH, DELETE, OPTIONS 메서드
 
 ## 라이브러리 설치하기
 

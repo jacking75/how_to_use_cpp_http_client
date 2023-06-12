@@ -1,6 +1,9 @@
-# `curlite.hpp` 사용법
+# curlite
 
-- 예제 코드 경로 : `/ExampleCodes/curliteExample`
+- 예제 코드 : `~/ExampleCodes/curliteExample`
+- 원본 코드 : https://github.com/grynko/curlite
+	- Last Commit : 2019/04/12
+	- Latest Release Version : None
 
 ## 들어가기전에
 
@@ -8,11 +11,13 @@
 
 - 해당 문서에서 설명할 `curlite` 라이브러리는 [libcurl](https://github.com/curl/curl)을 `C++`로 랩핑한 라이브러리다. 따라서 `curlite` 라이브러리를 적용하고자 하는 프로젝트에는 최소 **7.32 버전 이상의 `libcurl` 라이브러리가 설치되어 있어야**한다. ([`libcurl` 설치 방법](~/Manuals/libcurl.md))
 
-- 해당 라이브러리는 **현재 개발중**이며, **마지막 Commit 날짜는 문서 작성일(23/06/12) 기준 2019년 04월 12일**이다.
+## 라이브러리 특징
 
-- 해당 라이브러리는 **멀티 스레드를 지원하지 않는다.**
-
-- 해당 라이브러리는 **C++ 11 이상의 언어 지원이 필요**하다.
+- `libcurl` 필요
+- 직관적인 API
+- **`C++ 11` 이상** 필요.
+- **멀티스레드로 사용 불가능.**
+- **현재 개발중인 라이브러리**
 
 ## 라이브러리 설치하기
 

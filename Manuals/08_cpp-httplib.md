@@ -1,6 +1,9 @@
-# `cpp-httplib` 사용법
+# cpp-httplib
 
-- 예제 코드 경로 : `ExampleCodes/cpp-httplibExample`
+- 예제 경로 : `~/ExampleCodes/cpp-httplibExample`
+- 원본 코드 : https://github.com/yhirose/cpp-httplib
+	- Last Commit : 2023/06/10
+	- Latest Release Version : 0.12.6
 
 ## 들어가기전에
 
@@ -8,9 +11,12 @@
 
 ## 라이브러리 특징
 
-- 모든 요청은 동기로 작동한다. (**비동기 지원 X**)
-- 헤더 파일만 있으면 사용 가능하다. (*Header-Only*)
-- 해당 라이브러리로 서버 구현도 가능하다.
+- 직관적인 API
+- 크로스 플랫폼 지원
+- `C++ 11` 이상 필요
+- 모든 요청은 **동기로 동작**. (*비동기 지원 X*)
+- **Header-Only** 라이브러리
+- 서버 기능도 지원 (*해당 문서에서는 다루지 않는다.*)
 
 ## 라이브러리 설치하기
 
